@@ -8,10 +8,6 @@ const bodyParser = require("body-parser"),
   errorHandler = require("errorHandler"),
   expressErrorHandler = require("express-error-handler");
 const expressSession = require("express-session");
-var moment = require("moment");
-require("moment-timezone");
-moment.tz.setDefault("Asia/Seoul");
-
 const cors = require("cors");
 var config = require("./config/config");
 var route_loader = require("./routes/route_loader");
@@ -22,14 +18,13 @@ var passport = require("passport");
 var flash = require("connect-flash");
 app.locals.pretty = true;
 
-app.set("views", "./views_file");
-app.set("view engine", "jade");
+app.set("views", "./views");
+app.set("view engine", "ejs");
 
 app.set("port", process.env.PORT || config.server_port);
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use("/public", static(path.join(__dirname, "public")));
-app.use("/images", static(path.join(__dirname, "images")));
 //app.use('/images', static(path.join(__dirname, 'images')));
 app.use(cookieParser());
 app.use(
