@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <%- include ("./head.ejs") %>
+  </head>
+  <body>
+    <%- include ("./nav.ejs") %>
+    <div class="container">
+      <div class="form-group">
+        <label for="inputUser">작성자</label>
+        <input
+          disabled
+          type="text"
+          class="form-control"
+          id="inputUser"
+          value="<%= post.email %>"
+        />
+      </div>
+      <div class="form-group">
+        <label for="inputTitle">제목</label>
+        <input
+          disabled
+          type="text"
+          class="form-control"
+          id="inputTitle"
+          value="<%= post.title %>"
+        />
+      </div>
+      <div class="form-group">
+        <label for="inputContents">내용</label>
+        <textarea disabled class="form-control" id="inputContents" rows="10">
+<%= post.contents %></textarea
+        >
+      </div>
+      <a href="/posts">
+        <button type="button" class="btn btn-primary">목록보기</button>
+      </a>
+      <% if (post.user_id == user.id) { %>
+      <a href="/post/edit/<%= post.post_id %>">
+        <button type="button" class="btn btn-secondary">수정</button>
+      </a>
+      <a href="/post/delete/<%= post.post_id %>">
+        <button type="button" class="btn btn-danger">삭제</button>
+      </a>
+      <% } %> <% if (like.length > 0) { %>
+      <i class="fas fa-thumbs-up"></i>
+      <% } else { %>
+      <a href="/post/like/<%= post.post_id %>/<%= post.likes %>">
+        <i class="far fa-thumbs-up"></i>
+      </a>
+      <% } %> <%= post.likes %>
+    </div>
+    <div class="container">
+      <li>댓글 달기</li>
+      <form method="POST" action="<%= action %>">
+        <input type="text" name="comment" />
+        <button type="submit" class="btn btn-primary">확인</button>
+      </form>
+      <li>댓글</li>
+      <% comments.forEach(function(comment, index){ %>
+      <h4>
+        <%= index+1 %> : <strong><%= comment.email %></strong>님의 댓글 <%=
+        comment.time %> <% if(user.id == comment.user_id) { %>
+        <a
+          href="/post/comment/delete/<%= post.post_id %>/<%= comment.comments %>"
+        >
+          <button type="button" class="btn btn-danger">삭제</button>
+        </a>
+        <% } %>
+      </h4>
+      <input
+        disabled
+        type="text"
+        class="form-control"
+        value="<%= comment.comments %>"
+      />
+
+      <% }) %>
+    </div>
+  </body>
+</html>

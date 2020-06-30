@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <%- include ("./head.ejs") %>
+</head>
+<body>
+    <%- include ("./nav.ejs") %>
+    <div class="container">
+        <% if (user) { %>
+            <h2>Welcome ! <%= user.email %></h2>
+        <% } else { %>
+            <h2>Please Login!</h2>
+        <% } %>
+    </div>
+</body>
+</html>

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <%- include ("./head.ejs") %>
+</head>
+<body>
+    <%- include ("./nav.ejs") %>
+    <div class="container">
+        <h2>회원가입</h2>
+        <form method="POST" action="/signup">
+            <div class="form-group">
+                <label for="inputEmail">이메일</label>
+                <input required name="email" type="email" class="form-control" id="inputEmail">
+            </div>
+            <div class="form-group">
+                <label for="inputPassword">비밀번호</label>
+                <input required name="password" type="password" class="form-control" id="inputPassword">
+            </div>
+            <div class="form-group">
+                <label for="inputAge">나이</label>
+                <input name="age" type="number" class="form-control" id="inputAge">
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+
+        <% if (errorMessage) { %>
+            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                <strong>회원가입 실패!</strong>
+                <%= errorMessage %>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        <% } %>
+    </div>
+</body>
+</html>
