@@ -3,17 +3,12 @@ const express = require('express');
 const app = express();
 var bodyParser = require('body-parser');
 
-// Hyperledger Bridge
-const { FileSystemWallet, Gateway } = require('fabric-network');
 const fs = require('fs');
 const path = require('path');
-const ccpPath = path.resolve(__dirname, '..', 'network' ,'connection.json');
-const ccpJSON = fs.readFileSync(ccpPath, 'utf8');
-const ccp = JSON.parse(ccpJSON);
 
 // Constants
-const PORT = 8800;
-const HOST = '0.0.0.0';
+const PORT = 6000;
+const HOST = '127.0.0.1';
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
