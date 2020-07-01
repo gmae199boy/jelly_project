@@ -2,22 +2,26 @@ var express = require('express');
 var router = express.Router();
 
 var passport = require('passport');
-var User = require('../model/user');
+var Donor = require('../model/donor');
+var Recipient = require('../model/recipient');
 
-passport.use(User.createStrategy());
-passport.serializeUser(User.serializeUser());
-passport.deserializeUser(User.deserializeUser());
+passport.use(Donor.createStrategy());
+passport.serializeUser(Donor.serializeUser());
+passport.deserializeUser(Donor.deserializeUser());
+passport.use(Recipient.createStrategy());
+passport.serializeUser(Recipient.serializeUser());
+passport.deserializeUser(Recipient.deserializeUser());
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'hello', user: req.user });
+  res.render('index', { title: 'hello', donor: req.donor });
   // console.log(req.user.userId);
 });
 
-router.post('/', function(req, res){
-  var test = req.body.test;
-  console.log(test);
-  res.render('index', {title: test, user: req.user});
-});
+// router.post('/', function(req, res){
+//   var test = req.body.test;
+//   console.log(test);
+//   res.render('index', {title: test, user: req.user});
+// });
 
 module.exports = router;

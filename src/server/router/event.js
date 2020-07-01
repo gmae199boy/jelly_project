@@ -2,8 +2,12 @@ var express = require('express');
 var router = express.Router();
 var passport = require('passport');
 
-var User = require('../model/user');
-var Item = require('../model/item');
+var moment = require('moment');
+require('moment-timezone');
+moment.tz.setDefault("Asia/Seoul");
+
+var User = require('../model/donor');
+var Event = require('../model/event');
 
 passport.use(User.createStrategy());
 passport.serializeUser(User.serializeUser());
@@ -11,19 +15,58 @@ passport.deserializeUser(User.deserializeUser());
 
 // index
 router.get('/', function(req, res, next) {
-    Item.find({}, function(err, item){
-        res.render('items',{ title: 'item', item: item, user: req.user})
-    })
+    const page = req.body.page;
+    const perPage = 20;
+    Event.find({}, { _id: 0, name: 1, type: 1, amount: 1, startDate: 1, endDate: 1, desc: 1, status: 1 })
+    .sort({ $natural: 1 })
+    .skip(page * perPage)
+    .limit(perPage)
+    .lean()
+    .exec((err, result) => {
+        if (err) {console.log(err); res.send('query err!');}
+        if (result) { // 전송 할 데이터가 있으면
+            res.status(200).send(result);
+        } else {
+            res.status(401);
+        }
+    });
 });
+
+router.route("/create").all(function(req, res, next){
+    next();
+})
+    .get(function(req, res, next){
+        res.render('createEvent', {
+            donor: req.donor
+        });
+    })
+    .post(function(req, res, next){
+        var date = req.body.startDate;
+        var pp = moment(date).format("YYYY-MM-DD hh:mm");
+
+        var event = new Event({
+            name: req.body.name,
+            type: req.body.type,
+            amount: req.body.amount,
+            desc: req.body.desc,
+            status: req.body.status,
+            startDate: pp
+        })
+        event.save(function(err, result){
+            if(err) {console.log(err); res.send('event save err!');}
+            //console.log('시간 차이: ', moment.duration(moment().diff(result.startDate)).asHours());
+            res.send(result);
+        })
+    });
 
 // show
 router.get('/:id', function(req, res, next){
-    console.log("[SHOW GET]item id: " + req.params.id);
-    Item.findOne({ itemId: req.params.id }, (err, item)=>{
-        if(err) return console.log(err);
-        res.render('show', {title: "item 조회", item: item, user: req.user})
-    })
-})
+    console.log("[SHOW GET]evnet id: " + req.params.id);
+    Event.findOne({ eventId: req.params.id }, (err, event)=>{
+        if(err) {console.log(err); res.send('query err!');}
+        res.send(event);
+    });
+});
 
 // update
 router.get('/update/:id', (req, res) => {

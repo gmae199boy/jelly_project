@@ -7,7 +7,7 @@ const fs = require('fs');
 const path = require('path');
 
 // Constants
-const PORT = 6000;
+const PORT = 8080;
 const HOST = '127.0.0.1';
 
 // view engine setup
@@ -55,22 +55,24 @@ app.use(flash())
 
 // Router
 var indexRouter = require('./router/index');
-var loginRouter = require('./router/login');
-var joinRouter = require('./router/join');
-var logoutRouter = require('./router/logout');
-var itemsRouter = require('./router/items');
-var newRouter = require('./router/new');
-var rateRouter = require('./router/rate');
-var mypageRouter = require('./router/mypage');
+var eventRouter = require('./router/event');
+// var loginRouter = require('./router/login');
+// var joinRouter = require('./router/join');
+// var logoutRouter = require('./router/logout');
+// var itemsRouter = require('./router/items');
+// var newRouter = require('./router/new');
+// var rateRouter = require('./router/rate');
+// var mypageRouter = require('./router/mypage');
 
 app.use('/', indexRouter);
-app.use('/login', loginRouter);
-app.use('/join', joinRouter);
-app.use('/logout', logoutRouter);
-app.use('/items', itemsRouter);
-app.use('/new', newRouter);
-app.use('/rate', rateRouter);
-app.use('/mypage', mypageRouter);
+app.use('/event', eventRouter);
+// app.use('/login', loginRouter);
+// app.use('/join', joinRouter);
+// app.use('/logout', logoutRouter);
+// app.use('/items', itemsRouter);
+// app.use('/new', newRouter);
+// app.use('/rate', rateRouter);
+// app.use('/mypage', mypageRouter);
 
 // server start
 app.listen(PORT, HOST);
