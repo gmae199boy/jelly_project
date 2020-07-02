@@ -58,7 +58,7 @@ router.route("/create").all(function(req, res, next){
         event.save(function(err, result){
             if(err) {console.log(err); res.send('event save err!');}
             //console.log('시간 차이: ', moment.duration(moment().diff(result.startDate)).asHours());
-            res.send(result);
+            res.redirect('/event');
         })
     });
 
