@@ -38,12 +38,12 @@ router.get('/', function(req, res, next) {
 router.route("/create").all(function(req, res, next){
     next();
 })
-    .get(function(req, res, next){
+    .get(function(req, res){
         res.render('createEvent', {
             donor: req.donor
         });
     })
-    .post(function(req, res, next){
+    .post(function(req, res){
         var date = req.body.startDate;
         var pp = moment(date).format("YYYY-MM-DD hh:mm");
 
@@ -63,8 +63,7 @@ router.route("/create").all(function(req, res, next){
     });
 
 // show
-router.get('/:id', function(req, res, next){
-    console.log("[SHOW GET]evnet id: " + req.params.id);
+router.get('/:id', function(req, res){
     Event.findOne({ eventId: req.params.id }, (err, event)=>{
         if(err) {console.log(err); res.send('query err!');}
         res.render('event', {
@@ -93,29 +92,11 @@ router.post('/:id', (req, res) => {
     });
 });
 
-// create
-router.post('/', function(req, res, next){
-    var item = new Item();
-    item.name = req.body.name;
-    item.comment = req.body.comment;
-    item.detail = req.body.detail;
-    item.user = req.user.email;
-
-    console.log(item);
-
-    item.save(function (err, item){
-        if(err) return console.error(err);
-        console.log("등록 성공");
-    })
-    res.redirect("/items")
-})
-
 // delete
 router.get('/delete/:id', (req, res) => {
-    Item.deleteOne({ id: req.params.itemId }, (err, item) => {
-      if(err) return res.json(err);
-      console.log("삭제 성공")
-      res.redirect('/');
+    Event.deleteOne({ evnetId: req.params.eventId }, (err, event) => {
+      if(err) {console.log(err); res.send(err);}
+      res.redirect('/event');
     });
 });
 
