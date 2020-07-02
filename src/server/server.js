@@ -6,6 +6,42 @@ var bodyParser = require('body-parser');
 const fs = require('fs');
 const path = require('path');
 
+//truffle setting
+var contract = require('truffle-contract');
+var jelly_artifacts = require('../../build/contracts/Jelly.json');
+var Jelly = contract(jelly_artifacts);
+var account;
+var Web3 = require('web3');
+var web3 = new Web3('http://localhost:7545');
+web3.eth.getAccounts(function(err, accs){
+  if(err) {console.log(err);return;}
+  if(accs.length ===0) {console.log("어카운트 없음"); return;}
+  account = accs[0];
+
+  // Router
+var indexRouter = require('./router/index')(Jelly, account);
+var eventRouter = require('./router/event')(Jelly, account);
+// var loginRouter = require('./router/login');
+// var joinRouter = require('./router/join');
+// var logoutRouter = require('./router/logout');
+// var itemsRouter = require('./router/items');
+// var newRouter = require('./router/new');
+// var rateRouter = require('./router/rate');
+// var mypageRouter = require('./router/mypage');
+
+app.use('/', indexRouter);
+app.use('/event', eventRouter);
+// app.use('/login', loginRouter);
+// app.use('/join', joinRouter);
+// app.use('/logout', logoutRouter);
+// app.use('/items', itemsRouter);
+// app.use('/new', newRouter);
+// app.use('/rate', rateRouter);
+// app.use('/mypage', mypageRouter);
+
+});
+Jelly.setProvider(web3.currentProvider);
+
 // Constants
 const PORT = 8080;
 const HOST = '127.0.0.1';
@@ -53,26 +89,6 @@ app.use(passport.initialize())
 app.use(passport.session())
 app.use(flash())
 
-// Router
-var indexRouter = require('./router/index');
-var eventRouter = require('./router/event');
-// var loginRouter = require('./router/login');
-// var joinRouter = require('./router/join');
-// var logoutRouter = require('./router/logout');
-// var itemsRouter = require('./router/items');
-// var newRouter = require('./router/new');
-// var rateRouter = require('./router/rate');
-// var mypageRouter = require('./router/mypage');
-
-app.use('/', indexRouter);
-app.use('/event', eventRouter);
-// app.use('/login', loginRouter);
-// app.use('/join', joinRouter);
-// app.use('/logout', logoutRouter);
-// app.use('/items', itemsRouter);
-// app.use('/new', newRouter);
-// app.use('/rate', rateRouter);
-// app.use('/mypage', mypageRouter);
 
 // server start
 app.listen(PORT, HOST);

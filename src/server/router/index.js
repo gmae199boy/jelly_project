@@ -12,16 +12,19 @@ passport.use(Recipient.createStrategy());
 passport.serializeUser(Recipient.serializeUser());
 passport.deserializeUser(Recipient.deserializeUser());
 
-/* GET home page. */
-router.get('/', function(req, res, next) {
-  res.render('index', { title: 'hello', donor: req.donor });
-  // console.log(req.user.userId);
-});
 
-// router.post('/', function(req, res){
-//   var test = req.body.test;
-//   console.log(test);
-//   res.render('index', {title: test, user: req.user});
-// });
+module.exports = function(contract, account){
+  /* GET home page. */
+  router.get('/', function(req, res, next) {
+    res.render('index', { title: 'hello', donor: req.donor });
+    // console.log(req.user.userId);
+  });
 
-module.exports = router;
+  // router.post('/', function(req, res){
+  //   var test = req.body.test;
+  //   console.log(test);
+  //   res.render('index', {title: test, user: req.user});
+  // });
+  return router;
+
+}
