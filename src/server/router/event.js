@@ -17,7 +17,7 @@ passport.deserializeUser(User.deserializeUser());
 router.get('/', function(req, res, next) {
     const page = req.body.page;
     const perPage = 20;
-    Event.find({}, { _id: 0, name: 1, type: 1, amount: 1, startDate: 1, endDate: 1, desc: 1, status: 1 })
+    Event.find({}, { _id: 0, eventId: 1, name: 1, type: 1, amount: 1, startDate: 1, endDate: 1, desc: 1, status: 1 })
     .sort({ $natural: 1 })
     .skip(page * perPage)
     .limit(perPage)
@@ -25,9 +25,12 @@ router.get('/', function(req, res, next) {
     .exec((err, result) => {
         if (err) {console.log(err); res.send('query err!');}
         if (result) { // 전송 할 데이터가 있으면
-            res.status(200).send(result);
+            res.render('eventList', {
+                donor: req.donor,
+                events: result
+            })
         } else {
-            res.status(401);
+            res.status(401).send('err');
         }
     });
 });
@@ -64,7 +67,10 @@ router.get('/:id', function(req, res, next){
     console.log("[SHOW GET]evnet id: " + req.params.id);
     Event.findOne({ eventId: req.params.id }, (err, event)=>{
         if(err) {console.log(err); res.send('query err!');}
-        res.send(event);
+        res.render('event', {
+            donor : req.donor,
+            event: event
+        });
     });
 });
 

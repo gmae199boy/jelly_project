@@ -6,10 +6,10 @@
         <%- include('partials/navbar') %>
         <div class="section">
             <div class="header">
-                <h1>Item</h1>
-                <h2>아이템의 목록 리스트가 있는 페이지</h2>
+                <h1>Event</h1>
+                <h2>이벤트 목록 리스트가 있는 페이지</h2>
 
-                <% if(user == undefined){ %>
+                <% if(donor == undefined){ %>
                     <div class="text-muted">로그인을 하셔야 글쓰기가 가능합니다.</div>
                 <% }else{ %>
                     <a href="/new"><button class="btn btn-info"> 새 아이템 추가하기</button></a>
@@ -17,13 +17,13 @@
             </div>
 
             <div class="row">
-                <% if (item !== null){item.forEach((item)=>{ %>
+                <% if (events !== null){events.forEach((event)=>{ %>
                 <div class="col-lg-4">
-                    <a href="/items/<%= item.itemId %>">
+                    <a href="/event/<%= event.eventId %>">
                         <div class="card">
                             <div class="card-image"></div>
-                            <div class="card-title"><%= item.name %></div>
-                            <div class="card-comment"><%= item.detail %> </div>
+                            <div class="card-title"><%= event.name %></div>
+                            <div class="card-comment"><%= event.desc %> </div>
                         </div>
                     </a>
                 </div>

@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <%- include('partials/head') %>
+    </head>
+
+    <body>
+        <%- include('partials/navbar') %>
+        <div class="section">
+            <div class="header">
+                <li>Evnet Name : <%= event.name %></li>
+                <li>Event Desc : <%= event.desc %></li>
+                <li>Event Type : <%= event.type %></li>
+                <li>Event Amount : <%= event.amount %></li>
+                <li>Event Start Date : <%= event.startDate %></li>
+                <li>Event Status : <%= event.status %></li>
+            </div>
+        </div>
+    </body>
+</html>
