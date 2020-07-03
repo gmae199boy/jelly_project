@@ -12,7 +12,7 @@ var jelly_artifacts = require('../../build/contracts/Jelly.json');
 var Jelly = contract(jelly_artifacts);
 var account;
 var Web3 = require('web3');
-var web3 = new Web3('http://localhost:7545');
+var web3 = new Web3('http://localhost:8545');
 web3.eth.getAccounts(function(err, accs){
   if(err) {console.log(err);return;}
   if(accs.length ===0) {console.log("어카운트 없음"); return;}
