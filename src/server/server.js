@@ -3,14 +3,14 @@ const express = require('express');
 const app = express();
 var https = require('https');
 var bodyParser = require('body-parser');
-
+const fs = require('fs');
 const options = {
   key: fs.readFileSync('/etc/letsencrypt/live/blog.nopublisher.dev/privkey.pem'),
   cert: fs.readFileSync('/etc/letsencrypt/live/blog.nopublisher.dev/fullchain.pem'),
   ca: fs.readFileSync('/etc/letsencrypt/live/blog.nopublisher.dev/chain.pem')
 };
 
-const fs = require('fs');
+
 const path = require('path');
 
 //truffle setting
