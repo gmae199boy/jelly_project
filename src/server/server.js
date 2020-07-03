@@ -93,9 +93,9 @@ app.use(flash())
 
 
 // server start
-//app.listen(PORT, HOST);
-//console.log(`Running on http://${HOST}:${PORT}`);
+app.listen(PORT, HOST);
+console.log(`Running on http://${HOST}:${PORT}`);
 
-server.listen(PORT, function(){
-  console.log("서버 연결");
-})
+// server.listen(PORT, function(){
+//   console.log("서버 연결");
+// })
