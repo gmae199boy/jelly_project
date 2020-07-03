@@ -1,6 +1,8 @@
 // ExpressJS Setup
 const express = require('express');
 const app = express();
+var http = require('http');
+var server = http.createServer(app);
 var bodyParser = require('body-parser');
 
 const fs = require('fs');
@@ -91,5 +93,9 @@ app.use(flash())
 
 
 // server start
-app.listen(PORT, HOST);
-console.log(`Running on http://${HOST}:${PORT}`);
+//app.listen(PORT, HOST);
+//console.log(`Running on http://${HOST}:${PORT}`);
+
+server.listen(PORT, function(){
+  console.log("서버 연결");
+})
