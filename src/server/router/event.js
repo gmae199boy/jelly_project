@@ -61,24 +61,46 @@ module.exports = function(contract, account){
                 if(err) {console.log(err); res.send('event save err!');}
                 //console.log('시간 차이: ', moment.duration(moment().diff(result.startDate)).asHours());
                 contract.deployed().then(function(contractInstance){
-                    contractInstance.addEvent(result.name, result.type, result.amount, moment(result.startDate).format('YYYY-MM-DD hh:mm'), moment(result.endDate).format('YYYY-MM-DD hh:mm'),
-                        result.desc, result.status, {gas: 500000, from: account}).then(function(){
-                            res.redirect('/event');
-                        })
+                    contractInstance.addEvent(
+                        result.name,
+                        result.type, 
+                        result.amount, 
+                        moment(result.startDate).format('YYYY-MM-DD hh:mm'), 
+                        moment(result.endDate).format('YYYY-MM-DD hh:mm'),
+                        result.desc, result.status, {gas: 500000, from: account})
+                            .then(function(){
+                                res.redirect('/event');
+                            })
                 })
-                
             })
         });
 
     // show
     router.get('/:id', function(req, res){
-        Event.findOne({ eventId: req.params.id }, (err, event)=>{
-            if(err) {console.log(err); res.send('query err!');}
-            res.render('event', {
-                donor : req.donor,
-                event: event
+        /**
+         * Query for ethereum
+         */
+        console.log(req.params.id)
+        contract.deployed().then(function(contractInstance){
+            contractInstance.getEvent.call(req.params.id).then(function(event){
+                console.log(event)
+                res.render('event', {
+                    event: event,
+                    donor: req.donor
+                })
             });
-        });
+        })
+
+        /**
+         * Query for mongodb
+         */
+        // Event.findOne({ eventId: req.params.id }, (err, event)=>{
+        //     if(err) {console.log(err); res.send('query err!');}
+        //     res.render('event', {
+        //         donor : req.donor,
+        //         event: event
+        //     });
+        // });
     });
 
     // update
