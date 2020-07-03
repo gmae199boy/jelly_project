@@ -1,9 +1,14 @@
 // ExpressJS Setup
 const express = require('express');
 const app = express();
-var http = require('http');
-var server = http.createServer(app);
+var https = require('https');
 var bodyParser = require('body-parser');
+
+const options = {
+  key: fs.readFileSync('/etc/letsencrypt/live/blog.nopublisher.dev/privkey.pem'),
+  cert: fs.readFileSync('/etc/letsencrypt/live/blog.nopublisher.dev/fullchain.pem'),
+  ca: fs.readFileSync('/etc/letsencrypt/live/blog.nopublisher.dev/chain.pem')
+};
 
 const fs = require('fs');
 const path = require('path');
@@ -93,8 +98,12 @@ app.use(flash())
 
 
 // server start
-app.listen(PORT, HOST);
-console.log(`Running on http://${HOST}:${PORT}`);
+// app.listen(PORT, HOST);
+// console.log(`Running on http://${HOST}:${PORT}`);
+
+https.createServer(options, app).listen(PORT, function(){
+  console.log('8080 connected!'); 
+});
 
 // server.listen(PORT, function(){
 //   console.log("서버 연결");
