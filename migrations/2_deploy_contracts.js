@@ -1,5 +1,5 @@
-var TodoList = artifacts.require("./TodoList.sol");
+var Jelly = artifacts.require("./Jelly.sol");
 
 module.exports = function(deployer) {
-  deployer.deploy(TodoList);
+  deployer.deploy(Jelly);
 };

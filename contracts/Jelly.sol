@@ -1,4 +1,4 @@
-pragma solidity ^0.6.9;
+pragma solidity ^0.5.16;
 pragma experimental ABIEncoderV2;
 
 /*
@@ -22,12 +22,12 @@ contract Jelly {
 
     */
     struct Event {
-        uint256 No; // 이벤트 넘버 (primary key)
+        //uint256 No; // 이벤트 넘버 (primary key)
         string Name; // 이벤트 이름
         string Type; // 이벤트 타입 (기부 : 성금, 물품 등)
         uint256 Amount; // 이벤트의 달성 총액
-        uint256 StartDate; // 이벤트의 시작 시간
-        uint256 EndDate; // 이벤트의 종료 시간
+        string StartDate; // 이벤트의 시작 시간
+        string EndDate; // 이벤트의 종료 시간
         string Desc; // 이벤트 설명
         string Status; //이벤트의 상태 (시작 전, 모금 중, 이벤트 종료)
         //EventDetail[] EventDetails;
@@ -122,15 +122,14 @@ contract Jelly {
         string memory _name,
         string memory _type,
         uint256 _amount,
-        uint256 _startdate,
-        uint256 _enddate,
+        string memory _startdate,
+        string memory _enddate,
         string memory _desc,
         string memory _status
     ) public onlyOwner returns (bool) {
         uint256 len = events.length;
         events.push(
             Event(
-                events.length,
                 _name,
                 _type,
                 _amount,
@@ -171,7 +170,7 @@ contract Jelly {
     }
 
     // getEvent : 이벤트 목록 등에서 특정 이벤트를 불러왔을 때 이벤트 반환
-    /* 
+    /*
         uint256 _index  : 불러올 이벤트의 인덱스
 
         return Event    : 특정 이벤트
