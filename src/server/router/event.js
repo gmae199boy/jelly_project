@@ -47,30 +47,35 @@ module.exports = function(contract, account){
         })
         .post(function(req, res){
             var date = req.body.startDate;
-            var pp = moment(date).format("YYYY-MM-DD hh:mm");
             var event = new Event({
                 name: req.body.name,
                 type: req.body.type,
                 amount: req.body.amount,
                 desc: req.body.desc,
                 status: req.body.status,
-                startDate: pp
+                startDate: moment(date).format("YYYY-MM-DD hh:mm")
             })
-            console.log(account)
             event.save(function(err, result){
                 if(err) {console.log(err); res.send('event save err!');}
                 //console.log('시간 차이: ', moment.duration(moment().diff(result.startDate)).asHours());
                 contract.deployed().then(function(contractInstance){
                     contractInstance.addEvent(
-                        result.name,
-                        result.type, 
-                        result.amount, 
-                        moment(result.startDate).format('YYYY-MM-DD hh:mm'), 
-                        moment(result.endDate).format('YYYY-MM-DD hh:mm'),
-                        result.desc, result.status, {gas: 500000, from: account})
-                            .then(function(){
-                                res.redirect('/event');
-                            })
+                        result.eventId,
+                        {gas: 500000, from: account}
+                    ).then(function(bool){
+                        if(bool) console.log("addEvent Successful!!");
+                        else console.log("addEvent Fail");
+                        res.redirect('/event');
+                    })
+                        // result.name,
+                        // result.type, 
+                        // result.amount, 
+                        // moment(result.startDate).format('YYYY-MM-DD hh:mm'), 
+                        // moment(result.endDate).format('YYYY-MM-DD hh:mm'),
+                        // result.desc, result.status, {gas: 500000, from: account})
+                        //     .then(function(){
+                        //         res.redirect('/event');
+                        //     })
                 })
             })
         });
