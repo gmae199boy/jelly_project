@@ -6,12 +6,12 @@ var moment = require('moment');
 require('moment-timezone');
 moment.tz.setDefault("Asia/Seoul");
 
-var User = require('../model/donor');
+var Donor = require('../model/donor');
 var Event = require('../model/event');
 
-passport.use(User.createStrategy());
-passport.serializeUser(User.serializeUser());
-passport.deserializeUser(User.deserializeUser());
+passport.use(Donor.createStrategy());
+passport.serializeUser(Donor.serializeUser());
+passport.deserializeUser(Donor.deserializeUser());
 
 
 module.exports = function(contract, account){
@@ -37,9 +37,7 @@ module.exports = function(contract, account){
         });
     });
 
-    router.route("/create").all(function(req, res, next){
-        next();
-    })
+    router.route("/create")
         .get(function(req, res){
             res.render('createEvent', {
                 donor: req.donor
@@ -80,83 +78,93 @@ module.exports = function(contract, account){
             })
         });
 
+    router.post('/donate/:id', function(req, res){
+        const name = req.body.name;
+        const amount = req.body.amount;
+
+    });
+
+
     // show
     router.get('/:id', function(req, res){
         /**
          * Query for ethereum
          */
-        console.log(req.params.id)
-        contract.deployed().then(function(contractInstance){
-            contractInstance.getEvent.call(req.params.id).then(function(event){
-                console.log(event)
-                res.render('event', {
-                    event: event,
-                    donor: req.donor
-                })
-            });
-        })
+        // console.log(req.params.id)
+        // contract.deployed().then(function(contractInstance){
+        //     contractInstance.getEvent.call(req.params.id).then(function(event){
+        //         console.log(event)
+        //         res.render('event', {
+        //             event: event,
+        //             donor: req.donor
+        //         })
+        //     });
+        // })
 
         /**
          * Query for mongodb
          */
-        // Event.findOne({ eventId: req.params.id }, (err, event)=>{
-        //     if(err) {console.log(err); res.send('query err!');}
-        //     res.render('event', {
-        //         donor : req.donor,
-        //         event: event
-        //     });
-        // });
-    });
-
-    // update
-    router.get('/update/:id', (req, res) => {
-        Item.findOne({ id: req.params.itemId }, (err, item) => {
-        if(err) return res.json(err);
-        res.render('update', { title: "update",  user: req.user, item: item });
-        }); 
-    });
-
-    router.post('/:id', (req, res) => {
-        Item.updateOne(
-        { id: req.params.itemId }, 
-        { $set: { name: req.body.name, comment: req.body.comment, detail: req.body.detail } }, 
-        (err, item) => {
-        if(err) return res.json(err);
-        console.log("수정 성공")
-        res.redirect('/');
+        Event.findOne({ eventId: req.params.id }, (err, event)=>{
+            if(err) {console.log(err); res.send('query err!');}
+            console.log(event);
+            res.render('event', {
+                donor : req.donor,
+                event: event
+            });
         });
     });
 
-    // delete
-    router.get('/delete/:id', (req, res) => {
-        Event.deleteOne({ evnetId: req.params.eventId }, (err, event) => {
-        if(err) {console.log(err); res.send(err);}
-        res.redirect('/event');
-        });
-    });
+    // // update
+    // router.route('/update/:id')
+    //     .get((req, res) => {
+    //         Event.findOne({ id: req.params.itemId }, (err, event) => {
+    //             if(err) {console.log(err); res.send('query fail');}
+    //             res.render('update', { 
+    //                 event: event
+    //             });
+    //         }); 
+    //     })
+    //     .post((req, res) => {
+    //         Item.updateOne(
+    //             { id: req.params.eventId }, 
+    //             { $set: { name: req.body.name, comment: req.body.comment, detail: req.body.detail } }, 
+    //             (err, item) => {
+    //             if(err) return res.json(err);
+    //             console.log("수정 성공")
+    //             res.redirect('/');
+    //         });
+    //     })
 
-    //create an apply
-    router.post('/:id/applies', function(req, res, next){
-        var newapply = { body: req.body.apply, author: req.body.user }
-        console.log(newapply)
-        Item.findOne({ itemId: req.params.id }, function(err, item){
-            item.applies.push(newapply);
-            item.save();
-            console.log("신청 성공");
-            res.redirect('/');
-        })
-    });
+    // // delete
+    // router.get('/delete/:id', (req, res) => {
+    //     Event.deleteOne({ evnetId: req.params.eventId }, (err, event) => {
+    //     if(err) {console.log(err); res.send(err);}
+    //     res.redirect('/event');
+    //     });
+    // });
 
-    // admit an apply
-    router.post('/:id/admit', function(req, res, next){
-        var index = req.body.index;
-        Item.findOne({ itemId: req.params.id }, function(err, item){
-            if(err) return res.json({success:false, message:err});
-            item.applies[index].$set({status: "matched"});
-            item.save();
-            console.log(item.applies[index].status);
-            res.redirect('/')
-        })
-    })
+    // //create an apply
+    // router.post('/:id/applies', function(req, res, next){
+    //     var newapply = { body: req.body.apply, author: req.body.user }
+    //     console.log(newapply)
+    //     Item.findOne({ itemId: req.params.id }, function(err, item){
+    //         item.applies.push(newapply);
+    //         item.save();
+    //         console.log("신청 성공");
+    //         res.redirect('/');
+    //     })
+    // });
+
+    // // admit an apply
+    // router.post('/:id/admit', function(req, res, next){
+    //     var index = req.body.index;
+    //     Item.findOne({ itemId: req.params.id }, function(err, item){
+    //         if(err) return res.json({success:false, message:err});
+    //         item.applies[index].$set({status: "matched"});
+    //         item.save();
+    //         console.log(item.applies[index].status);
+    //         res.redirect('/')
+    //     })
+    // })
     return router;
 }

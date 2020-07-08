@@ -3,13 +3,35 @@ var passportLocalMongoose = require('passport-local-mongoose');
 var autoIncrement = require('mongoose-auto-increment');
 
 const donorSchema = new mongoose.Schema({
-    donorId: {type: Number},         // primary key
-    name: String,                    // 기부자 이름 or 닉네임
-    email: String,                   // 기부자 이메일
-    password: String,                // 기부자 아이디의 비밀번호
-    phoneNumber: String,             // 기부자 핸드폰 번호
-    address: String,                 // 기부자 주소
-    myEvents: [{eventId: Number}]    // 기부자가 지금까지 기부했던 기부 목록
+    donorId: {type: Number, unique: true},          // primary key
+    name: {
+        type: String,
+        unique: true,
+        //required: true,
+        index: true
+    },                                              // 기부자 이름 or 닉네임
+    email: {
+        type: String,
+        //required: true,
+        unique: true
+    },                                              // 기부자 이메일
+    password: {
+        type: String,
+        //required: true
+    },                               // 기부자 아이디의 비밀번호
+    phoneNumber: {
+        type: String,
+        //required: true
+    },                            // 기부자 핸드폰 번호
+    address: {
+        type: String,
+        //required: true
+    },                                // 기부자 주소
+    myEvents: [{
+        event: mongoose.Schema.Types.ObjectId,
+        ref: 'Event',
+        donateAmount: Number
+    }]                                              // 기부자가 지금까지 기부했던 기부 목록
 });
 // 플러그인 설정
 donorSchema.plugin(passportLocalMongoose, { usernameField : 'email'});

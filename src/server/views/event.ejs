@@ -8,12 +8,20 @@
         <%- include('partials/navbar') %>
         <div class="section">
             <div class="header">
-                <li>Evnet Name : <%= event.Name %></li>
-                <li>Event Desc : <%= event.Desc %></li>
-                <li>Event Type : <%= event.Type %></li>
-                <li>Event Amount : <%= event.Amount %></li>
-                <li>Event Start Date : <%= event.StartDate %></li>
-                <li>Event Status : <%= event.Status %></li>
+                <li>Evnet Name : <%= event.name %></li>
+                <li>Event Desc : <%= event.desc %></li>
+                <li>Event Type : <%= event.type %></li>
+                <li>Event Amount : <%= event.amount %></li>
+                <li>Event Start Date : <%= event.startDate %></li>
+                <li>Event Status : <%= event.status %></li>
+            </div>
+            <div>
+                <!-- <a href="/event/update">수정하기</a> -->
+                <form action="/donate/<%= event.eventId %>">
+                    <input type="text" name="name" placeholder="닉네임">
+                    <input type="text" name="amount" placeholder="기부 금액">
+                    <input type="submit">
+                </form>
             </div>
         </div>
     </body>

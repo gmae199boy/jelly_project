@@ -31,16 +31,19 @@ contract Jelly {
     function addEvent(uint256 _eventNum) public returns (bool) {
         if(events.length != _eventNum - 1) return false;
         events[_eventNum] = Event();
+        return true;
     }
 
     function addDonateTransaction(
         string memory _name,
         uint256 _amount,
-        uint256 _eventNum) public returns (bool) {
+        uint256 _eventNum
+        ) public returns (bool) {
             // 나중에 웹과 이더에서 이벤트 길이가 다를때 로직 변경
             if(events.length != _eventNum) return false;
             events[_eventNum].DonateProgress[msg.sender] =
                 DonateTransaction(_name, _amount);
+                return true;
     }
 
     // function getTotalDonateAmount(uint256 _eventNum) public view returns (uint256){
