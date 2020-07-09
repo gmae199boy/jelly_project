@@ -8,3 +8,18 @@
 
 - DB -> Mongodb  
 왜 몽고디비인가? -> 수정이 편해서
+
+# 노드 실행
+``` bash
+cd jelly_project/src/server
+npm install
+npm install -g truffle truffle-contract --unsafe-perm
+
+
+(이건 옵션)
+npm install -g ganache-cli --unsafe-perm   -> ganache를 cli환경에서 실행시켜 주는 개꿀템
+
+node server
+
+http://localhost:8080
+```
