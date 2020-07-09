@@ -15,7 +15,7 @@ contract Jelly {
         mapping (address => DonateTransaction) DonateProgress;
     }
     struct DonateTransaction {
-        string Name;
+        //string email;
         uint256 Amount;
     }
 
@@ -35,14 +35,14 @@ contract Jelly {
     }
 
     function addDonateTransaction(
-        string memory _name,
+        //string memory _email,
         uint256 _amount,
         uint256 _eventNum
         ) public returns (bool) {
             // 나중에 웹과 이더에서 이벤트 길이가 다를때 로직 변경
             if(events.length != _eventNum) return false;
             events[_eventNum].DonateProgress[msg.sender] =
-                DonateTransaction(_name, _amount);
+                DonateTransaction(_amount);
                 return true;
     }
 

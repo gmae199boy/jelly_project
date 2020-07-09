@@ -52,7 +52,7 @@ module.exports = function(contract, account){
                 desc: req.body.desc,
                 status: req.body.status,
                 startDate: moment(date).format("YYYY-MM-DD hh:mm")
-            })
+            });
             event.save(function(err, result){
                 if(err) {console.log(err); res.send('event save err!');}
                 //console.log('시간 차이: ', moment.duration(moment().diff(result.startDate)).asHours());
@@ -79,8 +79,9 @@ module.exports = function(contract, account){
         });
 
     router.post('/donate/:id', function(req, res){
-        const name = req.body.name;
+        const email = req.body.email;
         const amount = req.body.amount;
+        if(amount <= 0) {console.log("기부 금액이 0보다 작거나 같음"); res.send("금액을 0보다 크게 입력해");}
 
     });
 

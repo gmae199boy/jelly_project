@@ -8,12 +8,13 @@ const donorSchema = new mongoose.Schema({
         type: String,
         unique: true,
         //required: true,
-        index: true
+        //index: true
     },                                              // 기부자 이름 or 닉네임
     email: {
         type: String,
         //required: true,
-        unique: true
+        unique: true,
+        index: true
     },                                              // 기부자 이메일
     password: {
         type: String,
