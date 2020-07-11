@@ -12,7 +12,10 @@ const eventSchema = new mongoose.Schema({
     startDate: 'Moment',  // 이벤트 시작 시간
     endDate: Date,    // 이벤트 종료 시간
     desc: String,                                       // 이벤트 설명
-    status: String                                      // 이벤트 상태 (모금 중, 모금 종료 등)
+    status: {
+        type: String, 
+        // required: true
+    }                                      // 이벤트 상태 (모금 중, 모금 종료 등)
     //eventDetail:[{///}]
 });
 

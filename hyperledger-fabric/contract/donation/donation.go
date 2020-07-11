@@ -13,6 +13,7 @@ import (
 type SmartContract struct {
 }
 
+/*
 type PNJson struct {
 	ID           int    `json:"id"`
 	Name         string `json:"name"`
@@ -22,22 +23,25 @@ type PNJson struct {
 	RegistTime   string `json:"registtime"`
 	RegistNumber string `json:"registnumber"`
 }
+*/
 
-// PNInfo PN infomations
-type PNInfo struct {
-	ID           int    `json:"id"`
-	RegistTime   string `json:"registtime"`
-	RegistNumber string `json:"registnumber"`
+type Donor struct {
+	ObjectType string `json:"docType"`
+	Email string
 }
 
-// PNP PN person
-type PNP struct {
-	ID           int    `json:"id"`
-	Name         string `json:"name"`
-	Birthday     string `json:"birthday"`
-	Address      string `json:"address"`
-	PhoneNumber  string `json:"phoneNumber"`
-	PNInfomation PNInfo `json:"pninfo"`
+type DonorPrivateDetails struct {
+	ObjectType string `json:"docType"`
+	Name string `json:"name"`
+	Password string
+	PhoneNumber string
+	Address string
+	MyEvents MyEvent[]
+}
+
+type MyEvent struct {
+	EventNo	int
+	Amount int
 }
 
 type marble struct {

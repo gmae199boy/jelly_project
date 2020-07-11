@@ -15,7 +15,7 @@ const path = require('path');
 
 //truffle setting
 var contract = require('truffle-contract');
-var jelly_artifacts = require('../../build/contracts/Jelly.json');
+var jelly_artifacts = require('../build/contracts/Jelly.json');
 var Jelly = contract(jelly_artifacts);
 var account;
 var Web3 = require('web3');
