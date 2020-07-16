@@ -23,3 +23,11 @@ node server
 
 http://localhost:8080
 ```
+
+
+# 특이사항
+``` bash
+/jelly_project/hyperledger-fabric/network/start.sh
+```
+start.sh 쉘 스크립트 안 15줄에 sed -i 명령어가 있는데, 우분투에선 그냥 sed -i로 써도 되지만  
+맥에서는 sed -i.bak 으로 써야 동작함.

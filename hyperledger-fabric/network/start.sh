@@ -11,7 +11,10 @@ function replacePrivateKey() {
     echo "ca key file exchange"
     cp docker-compose-template.yml docker-compose.yml
     PRIV_KEY=$(ls crypto-config/peerOrganizations/org1.example.com/ca/ | grep _sk)
-    sed -i "s/CA_PRIVATE_KEY/${PRIV_KEY}/g" docker-compose.yml
+    #맥은 sed -i 명령어에 .bak을 붙여야함
+    sed -i.bak "s/CA_PRIVATE_KEY/${PRIV_KEY}/g" docker-compose.yml
+    #밑에 있는 코드는 우분투용 코드
+    #sed -i "s/CA_PRIVATE_KEY/${PRIV_KEY}/g" docker-compose.yml
 }
 
 function checkPrereqs() {
