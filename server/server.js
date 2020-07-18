@@ -28,6 +28,7 @@ web3.eth.getAccounts(function(err, accs){
   // Router
 var indexRouter = require('./router/index')(Jelly, account);
 var eventRouter = require('./router/event')(Jelly, account);
+var signupRouter = require('./router/signup')(Jelly, account);
 // var loginRouter = require('./router/login');
 // var joinRouter = require('./router/join');
 // var logoutRouter = require('./router/logout');
@@ -38,6 +39,7 @@ var eventRouter = require('./router/event')(Jelly, account);
 
 app.use('/', indexRouter);
 app.use('/event', eventRouter);
+app.use('/signup', signupRouter);
 // app.use('/login', loginRouter);
 // app.use('/join', joinRouter);
 // app.use('/logout', logoutRouter);
