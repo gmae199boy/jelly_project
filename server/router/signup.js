@@ -1,18 +1,22 @@
 var express = require('express');
 var router = express.Router();
 var passport = require('passport');
-var User = require('../model/user');
+var Donor = require('../model/donor');
+var Recipient = require('../model/recipient');
 
-passport.use(User.createStrategy());
-passport.serializeUser(User.serializeUser());
-passport.deserializeUser(User.deserializeUser());
+passport.use(Donor.createStrategy());
+passport.serializeUser(Donor.serializeUser());
+passport.deserializeUser(Donor.deserializeUser());
+passport.use(Recipient.createStrategy());
+passport.serializeUser(Recipient.serializeUser());
+passport.deserializeUser(Recipient.deserializeUser());
 
 const { FileSystemWallet, Gateway } = require('fabric-network');
 const fs = require('fs');
 const path = require('path');
-const ccpPath = path.resolve(__dirname, '../..', 'network' ,'connection.json');
-const ccpJSON = fs.readFileSync(ccpPath, 'utf8');
-const ccp = JSON.parse(ccpJSON);
+// const ccpPath = path.resolve(__dirname, '../..', 'network' ,'connection.json');
+// const ccpJSON = fs.readFileSync(ccpPath, 'utf8');
+// const ccp = JSON.parse(ccpJSON);
 
 async function cc_call(fn_name, args){
     
@@ -54,7 +58,7 @@ module.exports = function(contract, account){
 
   /* GET home page. */
   router.get('/', function(req, res, next) {
-      res.render('join', {title: "Join"});
+      res.render('signup', {title: "signup"});
   });
 
   // 회원가입 로직
@@ -62,23 +66,32 @@ module.exports = function(contract, account){
       console.log(req.body.email);
       console.log(req.body.name);
       console.log(req.body.password);
-      const handleRegister = (err, user)=>{
-        console.log(err)
+
+      switch(req.body.userType){
+        case "donor": {
+          // DB에 회원등록
+          Donor.register(new Donor({name: req.body.name, email: req.body.email}), req.body.password, function(err) {
+            if (err) {
+              console.log('error while user register!', err);
+              res.send("signup fail");
+            }
+            console.log('회원가입 성공');
+            res.redirect('/');
+          });
+        }
+        break;
+        case "recipient": {
+
+        }
+        break;
+        default: {
+          console.log("signup user type name error");
+          res.send("회원가입 시 지정 유저 타입이 donor, recipient 둘 중 하나가 아닙니다.");
+        }
       }
 
       // 블록체인에 등록
-      result = cc_call('addUser', req.body.email)
-      const myobj = {result: "success"}
-    
-      // DB에 회원등록
-      User.register(new User({name: req.body.name, email: req.body.email}), req.body.password, function(err) {
-        if (err) {
-          console.log('error while user register!', err);
-          return next(err);
-        }
-        console.log('회원가입 성공');
-        res.redirect('/');
-      });
+      // result = cc_call('addUser', req.body.email);
   })
   return router;
 }
