@@ -59,7 +59,7 @@ module.exports = function(contract, account){
                 contract.deployed().then(function(contractInstance){
                     contractInstance.addEvent(
                         result.eventId,
-                        {gas: 500000, from: account}
+                        {gas: 1000000, from: account}
                     ).then(function(bool){
                         if(bool) console.log("addEvent Successful!!");
                         else console.log("addEvent Fail");
