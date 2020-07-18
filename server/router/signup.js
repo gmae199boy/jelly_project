@@ -49,33 +49,36 @@ async function cc_call(fn_name, args){
   return result;
 }
 
-/* GET home page. */
-router.get('/', function(req, res, next) {
-    res.render('join', {title: "Join"});
-});
 
-// 회원가입 로직
-router.post('/',  function(req, res, next) {
-    console.log(req.body.email);
-    console.log(req.body.name);
-    console.log(req.body.password);
-    const handleRegister = (err, user)=>{
-      console.log(err)
-    }
+module.exports = function(contract, account){
 
-    // 블록체인에 등록
-    result = cc_call('addUser', req.body.email)
-    const myobj = {result: "success"}
-  
-    // DB에 회원등록
-    User.register(new User({name: req.body.name, email: req.body.email}), req.body.password, function(err) {
-      if (err) {
-        console.log('error while user register!', err);
-        return next(err);
+  /* GET home page. */
+  router.get('/', function(req, res, next) {
+      res.render('join', {title: "Join"});
+  });
+
+  // 회원가입 로직
+  router.post('/',  function(req, res, next) {
+      console.log(req.body.email);
+      console.log(req.body.name);
+      console.log(req.body.password);
+      const handleRegister = (err, user)=>{
+        console.log(err)
       }
-      console.log('회원가입 성공');
-      res.redirect('/');
-    });
+
+      // 블록체인에 등록
+      result = cc_call('addUser', req.body.email)
+      const myobj = {result: "success"}
+    
+      // DB에 회원등록
+      User.register(new User({name: req.body.name, email: req.body.email}), req.body.password, function(err) {
+        if (err) {
+          console.log('error while user register!', err);
+          return next(err);
+        }
+        console.log('회원가입 성공');
+        res.redirect('/');
+      });
   })
-  
-module.exports = router;
+  return router;
+}
