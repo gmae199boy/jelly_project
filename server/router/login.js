@@ -3,10 +3,14 @@ var router = express.Router();
 
 var passport = require('passport');
 var Donor = require('../model/donor');
+var Recipient = require('../model/recipient');
 
 passport.use(Donor.createStrategy());
 passport.serializeUser(Donor.serializeUser());
 passport.deserializeUser(Donor.deserializeUser());
+// passport.use(Recipient.createStrategy());
+// passport.serializeUser(Recipient.serializeUser());
+// passport.deserializeUser(Recipient.deserializeUser());
 
 module.exports = function(contract, account){
     router.get('/', function(req, res) {
