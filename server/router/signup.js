@@ -72,7 +72,7 @@ module.exports = function(contract, account){
           // DB에 회원등록
           Donor.register(new Donor({name: req.body.name, email: req.body.email}), req.body.password, function(err) {
             if (err) {
-              console.log('error while user register!', err);
+              console.log('error while donor register!', err);
               res.send("signup fail");
             }
             console.log('회원가입 성공');
@@ -81,7 +81,14 @@ module.exports = function(contract, account){
         }
         break;
         case "recipient": {
-
+          Recipient.register(new Recipient({name: req.body.name, email: req.body.email}), req.body.password, function(err) {
+            if (err) {
+              console.log('error while recipient register!', err);
+              res.send("signup fail");
+            }
+            console.log('회원가입 성공');
+            res.redirect('/');
+          });
         }
         break;
         default: {
