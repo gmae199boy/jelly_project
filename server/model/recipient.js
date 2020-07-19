@@ -17,7 +17,7 @@ recipientSchema.plugin(passportLocalMongoose, { usernameField : 'email'});
 recipientSchema.plugin(autoIncrement.plugin,{
 	model : 'Recipient',
 	field : 'recipientId',
-	startAt : 1, //시작 
+	startAt : 0, //시작
 	increment : 1 // 증가
 });
 

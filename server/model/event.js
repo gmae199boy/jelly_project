@@ -22,7 +22,7 @@ const eventSchema = new mongoose.Schema({
 eventSchema.plugin(autoIncrement.plugin,{
 	model : 'Event',
 	field : 'eventId',
-	startAt : 0, //시작 
+	startAt : 0, //시작
 	increment : 1 // 증가
 });
 
