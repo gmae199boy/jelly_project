@@ -1,5 +1,5 @@
 var mongoose = require('mongoose');
-var passportLocalMongoose = require('passport-local-mongoose');
+// var passportLocalMongoose = require('passport-local-mongoose');
 var autoIncrement = require('mongoose-auto-increment');
 
 const recipientSchema = new mongoose.Schema({
@@ -12,7 +12,7 @@ const recipientSchema = new mongoose.Schema({
     myProducts: [{eventId: Number}]     // 수혜자가 지금까지 샀던 물품 목록
 });
 // 플러그인 설정
-recipientSchema.plugin(passportLocalMongoose, { usernameField : 'email'});
+// recipientSchema.plugin(passportLocalMongoose, { usernameField : 'email'});
 
 recipientSchema.plugin(autoIncrement.plugin,{
 	model : 'Recipient',
