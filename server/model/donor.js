@@ -1,5 +1,5 @@
 var mongoose = require('mongoose');
-var passportLocalMongoose = require('passport-local-mongoose');
+// var passportLocalMongoose = require('passport-local-mongoose');
 var autoIncrement = require('mongoose-auto-increment');
 //var EventSchema = require('./event').schema;
 
@@ -36,7 +36,7 @@ const donorSchema = new mongoose.Schema({
     }]                                              // 기부자가 지금까지 기부했던 기부 목록
 });
 // 플러그인 설정
-donorSchema.plugin(passportLocalMongoose, { usernameField: 'email' });
+// donorSchema.plugin(passportLocalMongoose, { usernameField: 'email' });
 
 donorSchema.plugin(autoIncrement.plugin, {
     model: 'Donor',
