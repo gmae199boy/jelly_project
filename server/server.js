@@ -61,7 +61,7 @@ web3.eth.getAccounts(function(err, accs){
 
 
   // Passport
-  var passport = require('passport')
+  // var passport = require('passport')
   var session = require('express-session')
   // flash는 session이 필요하므로 반드시 session 아래에 정의해야 함
   var flash = require('connect-flash');
@@ -70,8 +70,8 @@ web3.eth.getAccounts(function(err, accs){
     resave: false,
     saveUninitialized: true
   }))
-  app.use(passport.initialize())
-  app.use(passport.session())
+  // app.use(passport.initialize())
+  // app.use(passport.session())
   app.use(flash())
 
   // Router
