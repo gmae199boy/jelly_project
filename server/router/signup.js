@@ -77,7 +77,13 @@ module.exports = function(contract, account){
             password: req.body.password
           });
           donor.save((err, user) => {
-            if(err) {console.log(err);res.send("유저 저장 실패(donor)");}
+            if(err) {
+              console.log(err);
+
+              res.render("signup", {
+              error: true,
+              errorMessage: "중복된 이메일 입니다."
+            });}
             req.session.user = user;
             res.redirect('/');
           });
@@ -103,7 +109,13 @@ module.exports = function(contract, account){
           });
 
           recipient.save((err, user) =>{
-            if (err) {console.log(err); res.send("유저 저장 실패(donor)");}
+            if(err) {
+              console.log(err);
+              
+              res.render("signup", {
+              error: true,
+              errorMessage: "중복된 이메일 입니다."
+            });}
             req.session.user = recipient;
             res.redirect('/');
           });
@@ -122,7 +134,10 @@ module.exports = function(contract, account){
         break;
         default: {
           console.log("signup user type name error");
-          res.send("회원가입 시 지정 유저 타입이 donor, recipient 둘 중 하나가 아닙니다.");
+          res.render("signup", {
+            error: true,
+            errorMessage: "userType이 올바르지 않습니다."
+          });
         }
       }
 
