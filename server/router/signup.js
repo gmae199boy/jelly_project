@@ -3,8 +3,8 @@ var router = express.Router();
 // var passport = require('passport');
 
 // session for mongoose passport
-// var Donor = require('../model/donor');
-// var Recipient = require('../model/recipient');
+var Donor = require('../model/donor');
+var Recipient = require('../model/recipient');
 
 // passport.use(Donor.createStrategy());
 // passport.serializeUser(Donor.serializeUser());
@@ -71,26 +71,53 @@ module.exports = function(contract, account){
 
       switch(req.body.userType){
         case "donor": {
-          // DB에 회원등록
-          Donor.register(new Donor({name: req.body.name, email: req.body.email}), req.body.password, function(err) {
-            if (err) {
-              console.log('error while donor register!', err);
-              res.send("signup fail");
-            }
-            console.log('회원가입 성공');
+          var donor = new Donor({
+            name: req.body.name, 
+            email: req.body.email, 
+            password: req.body.password
+          });
+          donor.save((err, user) => {
+            if(err) {console.log(err);res.send("유저 저장 실패(donor)");}
+            req.session.user = user;
             res.redirect('/');
           });
+
+          // for mongoose passport
+          // // DB에 회원등록
+          // Donor.register(donor, function(err) {
+          //   if (err) {
+          //     console.log('error while donor register!', err);
+          //     res.send("signup fail");
+          //   }
+          //   console.log('회원가입 성공');
+          //   req.session.donor = donor;
+          //   res.redirect('/');
+          // });
         }
         break;
         case "recipient": {
-          Recipient.register(new Recipient({name: req.body.name, email: req.body.email}), req.body.password, function(err) {
-            if (err) {
-              console.log('error while recipient register!', err);
-              res.send("signup fail");
-            }
-            console.log('회원가입 성공');
+          var recipient = new Recipient({
+            name: req.body.name, 
+            email: req.body.email, 
+            password: req.body.password
+          });
+
+          recipient.save((err, user) =>{
+            if (err) {console.log(err); res.send("유저 저장 실패(donor)");}
+            req.session.user = recipient;
             res.redirect('/');
           });
+
+          // for mongoose passport
+          // Recipient.register(recipient, function(err) {
+          //   if (err) {
+          //     console.log('error while recipient register!', err);
+          //     res.send("signup fail");
+          //   }
+          //   console.log('회원가입 성공');
+          //   req.session.user = recipient;
+          //   res.redirect('/');
+          // });
         }
         break;
         default: {
