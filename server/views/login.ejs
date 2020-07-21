@@ -10,6 +10,12 @@
                 <hr>
             </div>
             <form class="login-form" action="/login" method="POST">
+                <input list="type" name="userType">
+
+                <datalist id="type">
+                  <option value="donor">
+                  <option value="recipient">
+                </datalist>
                 <input class="newitem-form" type="text" name="email" placeholder="이메일을 입력하세요">  <br>
                 <input class="newitem-form" type="password" name="password" placeholder="비밀번호를 입력하세요"> <br>
                 <input class="btn btn-primary newitem-btn" type="submit">
