@@ -20,9 +20,52 @@ module.exports = function(contract, account){
     });
 
     router.post('/', function(req, res){//passport.authenticate('local', { failureRedirect: '/login', failureFlash: true}), function(req, res) {
-        console.log("로그인 성공");
-        req.session.user = user;// 이수정
-        res.redirect('/');
+        var email = req.body.email;
+        var password = req.body.password
+        switch(req.body.userType){
+            case "donor": {
+                Donor.find({email: email}, (err, result) => {
+                    if(err) {
+                        console.log(err);
+                        
+                        res.render("login", {
+                        error: true,
+                        errorMessage: "이메일이 없거나 오류가 생겼습니다."
+                      });
+                    }
+                    if(result != undefined){
+                        req.session.user = result;
+                        res.redirect('/');
+                    }
+                });
+            }
+            break;
+            case "recipient": {
+                Recipient.find({email: email}, (err, result) => {
+                    if(err) {
+                        console.log(err);
+                        
+                        res.render("login", {
+                        error: true,
+                        errorMessage: "이메일이 없거나 오류가 생겼습니다."
+                      });
+                    }
+                    if(result != undefined){
+                        req.session.user = result;
+                        res.redirect('/');
+                    }
+                    
+                });
+            }
+            break;
+            default: {
+              console.log("signup user type name error");
+              res.render("signup", {
+                error: true,
+                errorMessage: "userType이 올바르지 않습니다."
+              });
+            }
+          }
     });
     return router;
 }
