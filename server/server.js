@@ -61,7 +61,7 @@ web3.eth.getAccounts(function(err, accs){
 
 
   // Passport
-  // var passport = require('passport')
+  // var passport = require('passport') // 지금은 그냥 express-session 으로 테스트
   var session = require('express-session')
   // flash는 session이 필요하므로 반드시 session 아래에 정의해야 함
   var flash = require('connect-flash');
