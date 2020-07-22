@@ -1,5 +1,5 @@
 var mongoose = require('mongoose');
-var passportLocalMongoose = require('passport-local-mongoose');
+// var passportLocalMongoose = require('passport-local-mongoose');
 var autoIncrement = require('mongoose-auto-increment');
 var moment = require('moment');
 require('mongoose-moment')(mongoose);
@@ -22,7 +22,7 @@ const eventSchema = new mongoose.Schema({
 eventSchema.plugin(autoIncrement.plugin,{
 	model : 'Event',
 	field : 'eventId',
-	startAt : 0, //시작 
+	startAt : 0, //시작
 	increment : 1 // 증가
 });
 

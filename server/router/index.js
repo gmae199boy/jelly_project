@@ -1,22 +1,26 @@
 var express = require('express');
 var router = express.Router();
 
-var passport = require('passport');
+// var passport = require('passport');
+
+
+// session for mongoose passport
 var Donor = require('../model/donor');
 var Recipient = require('../model/recipient');
 
-passport.use(Donor.createStrategy());
-passport.serializeUser(Donor.serializeUser());
-passport.deserializeUser(Donor.deserializeUser());
-passport.use(Recipient.createStrategy());
-passport.serializeUser(Recipient.serializeUser());
-passport.deserializeUser(Recipient.deserializeUser());
+// passport.use(Donor.createStrategy());
+// passport.serializeUser(Donor.serializeUser());
+// passport.deserializeUser(Donor.deserializeUser());
+// passport.use(Recipient.createStrategy());
+// passport.serializeUser(Recipient.serializeUser());
+// passport.deserializeUser(Recipient.deserializeUser());
 
 
 module.exports = function(contract, account){
   /* GET home page. */
   router.get('/', function(req, res, next) {
-    res.render('index', { title: 'hello', donor: req.donor });
+    console.log(req.session.user);
+    res.render('index', { title: 'hello', user: req.session.user });
     // console.log(req.user.userId);
   });
 

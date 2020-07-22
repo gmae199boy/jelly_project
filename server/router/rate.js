@@ -1,8 +1,6 @@
 var express = require('express');
 var router = express.Router();
-var passport = require('passport');
-var User = require('../model/user');
-var Item = require('../model/item');
+// var passport = require('passport');
 
 const { FileSystemWallet, Gateway } = require('fabric-network');
 const fs = require('fs');
@@ -11,9 +9,9 @@ const ccpPath = path.resolve(__dirname, '../..', 'network' ,'connection.json');
 const ccpJSON = fs.readFileSync(ccpPath, 'utf8');
 const ccp = JSON.parse(ccpJSON);
 
-passport.use(User.createStrategy());
-passport.serializeUser(User.serializeUser());
-passport.deserializeUser(User.deserializeUser());
+// passport.use(User.createStrategy());
+// passport.serializeUser(User.serializeUser());
+// passport.deserializeUser(User.deserializeUser());
 
 
 async function cc_call(fn_name, args){
