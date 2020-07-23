@@ -85,6 +85,7 @@ module.exports = function(contract, account){
               errorMessage: "중복된 이메일 입니다."
             });}
             req.session.user = user;
+            console.log(user);
             res.redirect('/');
           });
 

@@ -80,7 +80,7 @@ web3.eth.getAccounts(function(err, accs){
   var signupRouter = require('./router/signup')(Jelly, account);
   var loginRouter = require('./router/login')(Jelly, account);
   // var joinRouter = require('./router/join');
-  // var logoutRouter = require('./router/logout');
+  var logoutRouter = require('./router/logout')(Jelly, account);
   // var itemsRouter = require('./router/items');
   // var newRouter = require('./router/new');
   // var rateRouter = require('./router/rate');
@@ -91,7 +91,7 @@ web3.eth.getAccounts(function(err, accs){
   app.use('/signup', signupRouter);
   app.use('/login', loginRouter);
   // app.use('/join', joinRouter);
-  // app.use('/logout', logoutRouter);
+  app.use('/logout', logoutRouter);
   // app.use('/items', itemsRouter);
   // app.use('/new', newRouter);
   // app.use('/rate', rateRouter);

@@ -24,7 +24,9 @@
                     <li><a href="/join">회원가입</a></li>
                 <% }else{ %>
                     <li><a><strong><%= user.name %></strong> 님 안녕하세요!</a></li>
+                    <li><a href="/credit">결제하기</a></li>
                     <li><a href="/mypage">마이페이지</a></li>
+                <!-- <% if(user.type == donor?){ %> -->
                     <li><a href="/logout">로그아웃</a></li>
                 <% } %>
             </ul>

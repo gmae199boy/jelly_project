@@ -1,27 +1,36 @@
 var express = require('express');
 var router = express.Router();
+var request = require('request');
 
 // var passport = require('passport');
 
 // session for mongoose passport
 var Donor = require('../model/donor');
-var Recipient = require('../model/recipient');
 
 // passport.use(Donor.createStrategy());
 // passport.serializeUser(Donor.serializeUser());
 // passport.deserializeUser(Donor.deserializeUser());
-// passport.use(Recipient.createStrategy());
-// passport.serializeUser(Recipient.serializeUser());
-// passport.deserializeUser(Recipient.deserializeUser());
 
 module.exports = function(contract, account){
     router.get('/', function(req, res) {
-        res.render('login', {title: "login", user: req.session.user, message: req.flash('error')});
+        // require -> views page (credit.ejs)
+        res.render('credit', {title: "credit", user: req.session.user, message: req.flash('error')});
     });
 
-    router.post('/', function(req, res){//passport.authenticate('local', { failureRedirect: '/login', failureFlash: true}), function(req, res) {
-        var email = req.body.email;
-        var password = req.body.password
+    router.post('/', function(req, res){
+        var amount = req.body.amount;
+        var headers = {
+            'Authorization':'KakaoAK 3f673c88c4254221b40f3bea7349064f',
+        }
+        var options = {
+            url: "https://kapi.kakao.com/v1/payment/ready",
+            method: "POST",
+            headers: headers,
+        }
+        POST /v1/payment/ready HTTP/1.1
+Host: kapi.kakao.com
+Authorization: KakaoAK {admin_key}
+Content-type: application/x-www-form-urlencoded;charset=utf-8
         switch(req.body.userType){
             case "donor": {
                 Donor.find({email: email, password: password}, (err, result) => {
