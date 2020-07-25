@@ -19,7 +19,8 @@ module.exports = function(contract, account){
     router.route('/')
         .get(function(req, res) {
             // require -> views page (credit.ejs)
-            res.render('credit', {title: "credit", user: req.session.user, message: req.flash('error')});
+            if(req.user == undefined) res.send("로그인을 해주세요");
+            res.render('credit', {title: "credit", user: req.user, message: req.flash('error')});
         })
         .post(function(req, res){
             /**
@@ -90,7 +91,8 @@ module.exports = function(contract, account){
             var json = JSON.parse(body);
             console.log(json);
             res.render('credit_complete', {
-                amount: json.amount,
+                amount: json.amount.total,
+                user: req.user,
             })
         });
     })
