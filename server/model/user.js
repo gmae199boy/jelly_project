@@ -3,8 +3,8 @@ var passportLocalMongoose = require('passport-local-mongoose');
 var autoIncrement = require('mongoose-auto-increment');
 //var EventSchema = require('./event').schema;
 
-const donorSchema = new mongoose.Schema({
-    donorId: { type: Number, unique: true },          // primary key
+const userSchema = new mongoose.Schema({
+    userId: { type: Number, unique: true },          // primary key
     name: {
         type: String,
         unique: true,
@@ -36,11 +36,11 @@ const donorSchema = new mongoose.Schema({
     }]                                              // 기부자가 지금까지 기부했던 기부 목록
 });
 // 플러그인 설정
-donorSchema.plugin(passportLocalMongoose, { usernameField: 'email' });
+userSchema.plugin(passportLocalMongoose, { usernameField: 'email' });
 
-donorSchema.plugin(autoIncrement.plugin, {
-    model: 'Donor',
-    field: 'donorId',
+userSchema.plugin(autoIncrement.plugin, {
+    model: 'User',
+    field: 'userId',
     startAt: 0, //시작 
     increment: 1 // 증가
 });
@@ -48,6 +48,6 @@ donorSchema.plugin(autoIncrement.plugin, {
 // const model = mongoose.model('User', userSchema);
 
 // export default model;
-module.exports = mongoose.model('Donor', donorSchema);
+module.exports = mongoose.model('User', userSchema);
 
 

@@ -1,19 +1,18 @@
 var express = require('express');
 var router = express.Router();
 var passport = require('passport');
-var Donor = require('../model/donor');
-var Recipient = require('../model/recipient');
 
-passport.use(Donor.createStrategy());
-passport.serializeUser(Donor.serializeUser());
-passport.deserializeUser(Donor.deserializeUser());
-passport.use(Recipient.createStrategy());
-passport.serializeUser(Recipient.serializeUser());
-passport.deserializeUser(Recipient.deserializeUser());
+// session for mongoose passport
+var User = require('../model/user');
+
+passport.use(User.createStrategy());
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
 
 const { FileSystemWallet, Gateway } = require('fabric-network');
 const fs = require('fs');
 const path = require('path');
+const user = require('../model/user');
 // const ccpPath = path.resolve(__dirname, '../..', 'network' ,'connection.json');
 // const ccpJSON = fs.readFileSync(ccpPath, 'utf8');
 // const ccp = JSON.parse(ccpJSON);
@@ -67,35 +66,95 @@ module.exports = function(contract, account){
       console.log(req.body.name);
       console.log(req.body.password);
 
-      switch(req.body.userType){
-        case "donor": {
-          // DB에 회원등록
-          Donor.register(new Donor({name: req.body.name, email: req.body.email}), req.body.password, function(err) {
-            if (err) {
-              console.log('error while donor register!', err);
-              res.send("signup fail");
-            }
-            console.log('회원가입 성공');
-            res.redirect('/');
-          });
+      var userInfo = new User({
+        name: req.body.name,
+        email: req.body.email,
+        password: req.body.password.toString(),
+      });
+
+      // DB에 회원등록
+      User.register(new User({name: req.body.name, email: req.body.email}), req.body.password, function(err) {
+        if (err) {
+          console.log('error while user register!', err);
+          return next(err);
         }
-        break;
-        case "recipient": {
-          Recipient.register(new Recipient({name: req.body.name, email: req.body.email}), req.body.password, function(err) {
-            if (err) {
-              console.log('error while recipient register!', err);
-              res.send("signup fail");
-            }
-            console.log('회원가입 성공');
-            res.redirect('/');
-          });
-        }
-        break;
-        default: {
-          console.log("signup user type name error");
-          res.send("회원가입 시 지정 유저 타입이 donor, recipient 둘 중 하나가 아닙니다.");
-        }
-      }
+        console.log('회원가입 성공');
+        res.redirect('/');
+      });
+
+      // User create for express-session
+      // switch(req.body.userType){
+      //   case "donor": {
+      //     var donor = new Donor({
+      //       name: req.body.name, 
+      //       email: req.body.email, 
+      //       password: req.body.password
+      //     });
+      //     donor.save((err, user) => {
+      //       if(err) {
+      //         console.log(err);
+
+      //         res.render("signup", {
+      //         error: true,
+      //         errorMessage: "중복된 이메일 입니다."
+      //       });}
+      //       req.session.user = user;
+      //       console.log(user);
+      //       res.redirect('/');
+      //     });
+
+      //     // for mongoose passport
+      //     // // DB에 회원등록
+      //     // Donor.register(donor, function(err) {
+      //     //   if (err) {
+      //     //     console.log('error while donor register!', err);
+      //     //     res.send("signup fail");
+      //     //   }
+      //     //   console.log('회원가입 성공');
+      //     //   req.session.donor = donor;
+      //     //   res.redirect('/');
+      //     // });
+      //   }
+      //   break;
+      //   case "recipient": {
+      //     var recipient = new Recipient({
+      //       name: req.body.name, 
+      //       email: req.body.email, 
+      //       password: req.body.password
+      //     });
+
+      //     recipient.save((err, user) =>{
+      //       if(err) {
+      //         console.log(err);
+              
+      //         res.render("signup", {
+      //         error: true,
+      //         errorMessage: "중복된 이메일 입니다."
+      //       });}
+      //       req.session.user = recipient;
+      //       res.redirect('/');
+      //     });
+
+      //     // for mongoose passport
+      //     // Recipient.register(recipient, function(err) {
+      //     //   if (err) {
+      //     //     console.log('error while recipient register!', err);
+      //     //     res.send("signup fail");
+      //     //   }
+      //     //   console.log('회원가입 성공');
+      //     //   req.session.user = recipient;
+      //     //   res.redirect('/');
+      //     // });
+      //   }
+      //   break;
+      //   default: {
+      //     console.log("signup user type name error");
+      //     res.render("signup", {
+      //       error: true,
+      //       errorMessage: "userType이 올바르지 않습니다."
+      //     });
+      //   }
+      // }
 
       // 블록체인에 등록
       // result = cc_call('addUser', req.body.email);

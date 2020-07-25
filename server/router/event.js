@@ -6,12 +6,12 @@ var moment = require('moment');
 require('moment-timezone');
 moment.tz.setDefault("Asia/Seoul");
 
-var Donor = require('../model/donor');
-var Event = require('../model/event');
+var Donor = require('../model/user');
+// var Event = require('../model/event');
 
-passport.use(Donor.createStrategy());
-passport.serializeUser(Donor.serializeUser());
-passport.deserializeUser(Donor.deserializeUser());
+// passport.use(Donor.createStrategy());
+// passport.serializeUser(Donor.serializeUser());
+// passport.deserializeUser(Donor.deserializeUser());
 
 
 module.exports = function(contract, account){

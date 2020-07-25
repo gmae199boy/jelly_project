@@ -2,14 +2,14 @@ var express = require('express');
 var router = express.Router();
 var request = require('request');
 
-// var passport = require('passport');
+var passport = require('passport');
 
 // session for mongoose passport
-var Donor = require('../model/donor');
+var User = require('../model/user');
 
-// passport.use(Donor.createStrategy());
-// passport.serializeUser(Donor.serializeUser());
-// passport.deserializeUser(Donor.deserializeUser());
+passport.use(User.createStrategy());
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
 
 module.exports = function(contract, account){
     router.get('/', function(req, res) {
@@ -35,14 +35,15 @@ module.exports = function(contract, account){
                 'quantity': '1',
                 'total_amount': '10000',
                 'tax_free_amount': '0',
-                'approval_url': 'https://developers.kakao.com/success',
-                'fail_url': 'https://developers.kakao.com/fail',
-                'cancel_url': 'https://developers.kakao.com/cancel',
+                'approval_url': 'http://localhost:8080',
+                'fail_url': 'http://localhost:8080',
+                'cancel_url': 'http://localhost:8080',
             },
         }
         request(options, (err, response, body) =>{
             if(err) {console.log(err); res.send(err);}
             console.log(body);
+            res.redirect(body.next_redirect_pc_url);
         })
         // switch(req.body.userType){
         //     case "donor": {
