@@ -61,7 +61,7 @@ web3.eth.getAccounts(function(err, accs){
 
 
   // Passport
-  // var passport = require('passport') // 지금은 그냥 express-session 으로 테스트
+  var passport = require('passport');
   var session = require('express-session')
   // flash는 session이 필요하므로 반드시 session 아래에 정의해야 함
   var flash = require('connect-flash');
@@ -70,8 +70,8 @@ web3.eth.getAccounts(function(err, accs){
     resave: false,
     saveUninitialized: true
   }))
-  // app.use(passport.initialize())
-  // app.use(passport.session())
+  app.use(passport.initialize())
+  app.use(passport.session())
   app.use(flash())
 
   // Router
@@ -81,6 +81,7 @@ web3.eth.getAccounts(function(err, accs){
   var loginRouter = require('./router/login')(Jelly, account);
   // var joinRouter = require('./router/join');
   var logoutRouter = require('./router/logout')(Jelly, account);
+  var creditRouter = require('./router/credit')(Jelly, account);
   // var itemsRouter = require('./router/items');
   // var newRouter = require('./router/new');
   // var rateRouter = require('./router/rate');
@@ -90,6 +91,7 @@ web3.eth.getAccounts(function(err, accs){
   app.use('/event', eventRouter);
   app.use('/signup', signupRouter);
   app.use('/login', loginRouter);
+  app.use('/credit', creditRouter);
   // app.use('/join', joinRouter);
   app.use('/logout', logoutRouter);
   // app.use('/items', itemsRouter);
