@@ -12,83 +12,87 @@ passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
 module.exports = function(contract, account){
-    router.get('/', function(req, res) {
-        // require -> views page (credit.ejs)
-        res.render('credit', {title: "credit", user: req.session.user, message: req.flash('error')});
-    });
 
-    router.post('/', function(req, res){
-        var amount = req.body.amount;
+    // 젤리 결제 시스템 
+    // 사용 API : Kakaopay 단건 결제.
+    // 추가 정기 결제 시스템
+    router.route('/')
+        .get(function(req, res) {
+            // require -> views page (credit.ejs)
+            res.render('credit', {title: "credit", user: req.session.user, message: req.flash('error')});
+        })
+        .post(function(req, res){
+            /**
+             * 아직 이중지불 문제는 해결하지 않는다.
+             */
+            var amount = req.body.amount;
+            var headers = {
+                'Authorization': 'KakaoAK 3f673c88c4254221b40f3bea7349064f',
+                'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8',
+            }
+            var options = {
+                url: "https://kapi.kakao.com/v1/payment/ready",
+                method: "POST",
+                headers: headers,
+                form: {
+                    'cid': 'TC0ONETIME',
+                    'partner_order_id': 'TC0ONETIME',
+                    'partner_user_id': 'TC0ONETIME',
+                    'item_name': 'Jelly',
+                    'quantity': amount,
+                    'total_amount': amount,
+                    'tax_free_amount': '0',
+                    'approval_url': 'http://localhost:8080/credit/complete',
+                    'fail_url': 'http://localhost:8080',
+                    'cancel_url': 'http://localhost:8080',
+                },
+            }
+            request(options, (err, response, body) =>{
+                if(err) {console.log(err); res.send(err);}
+                var json = JSON.parse(body);
+                console.log(json);
+                req.user.creditRecord.push({
+                    tid: json.tid,
+                    partnerOrderId: 'TC0ONETIME',
+                    partnerUserId: 'TC0ONETIME',
+                    itemName: 'Jelly',
+                    totalAmount: amount,
+                    quantity: amount,
+                });
+                req.user.save((err, result) => {
+                    if(err) {console.log(err); res.send(err);}
+                    res.redirect(json.next_redirect_pc_url);
+                })
+            });
+        });
+    
+    router.get('/complete', function(req, res) {
+        var pg_token = req.query.pg_token;
         var headers = {
             'Authorization': 'KakaoAK 3f673c88c4254221b40f3bea7349064f',
             'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8',
         }
         var options = {
-            url: "https://kapi.kakao.com/v1/payment/ready",
+            url: "https://kapi.kakao.com/v1/payment/approve",
             method: "POST",
             headers: headers,
             form: {
                 'cid': 'TC0ONETIME',
+                'tid': req.user.creditRecord[req.user.creditRecord.length-1].tid,
+                'pg_token': pg_token,
                 'partner_order_id': 'TC0ONETIME',
                 'partner_user_id': 'TC0ONETIME',
-                'item_name': 'Jelly',
-                'quantity': '1',
-                'total_amount': '10000',
-                'tax_free_amount': '0',
-                'approval_url': 'http://localhost:8080',
-                'fail_url': 'http://localhost:8080',
-                'cancel_url': 'http://localhost:8080',
             },
         }
         request(options, (err, response, body) =>{
             if(err) {console.log(err); res.send(err);}
-            console.log(body);
-            res.redirect(body.next_redirect_pc_url);
-        })
-        // switch(req.body.userType){
-        //     case "donor": {
-        //         Donor.find({email: email, password: password}, (err, result) => {
-        //             if(err) {
-        //                 console.log(err);
-                        
-        //                 res.render("login", {
-        //                 error: true,
-        //                 errorMessage: "이메일이 없거나 오류가 생겼습니다."
-        //               });
-        //             }
-        //             if(result != undefined){
-        //                 req.session.user = result;
-        //                 res.redirect('/');
-        //             }
-        //         });
-        //     }
-        //     break;
-        //     case "recipient": {
-        //         Recipient.find({email: email, password: password}, (err, result) => {
-        //             if(err) {
-        //                 console.log(err);
-                        
-        //                 res.render("login", {
-        //                 error: true,
-        //                 errorMessage: "이메일이 없거나 오류가 생겼습니다."
-        //               });
-        //             }
-        //             if(result != undefined){
-        //                 req.session.user = result;
-        //                 res.redirect('/');
-        //             }
-                    
-        //         });
-        //     }
-        //     break;
-        //     default: {
-        //       console.log("signup user type name error");
-        //       res.render("signup", {
-        //         error: true,
-        //         errorMessage: "userType이 올바르지 않습니다."
-        //       });
-        //     }
-        //   }
-    });
+            console.log("결제 승인 페이지 입니다!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+            var json = JSON.parse(body);
+            console.log(json);
+            res.render('credit_complete', {
+                amount: json.amount,
+            })
+        });
+    })
     return router;
 }
