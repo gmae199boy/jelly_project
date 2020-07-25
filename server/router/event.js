@@ -1,12 +1,12 @@
 var express = require('express');
 var router = express.Router();
-// var passport = require('passport');
+var passport = require('passport');
 
 var moment = require('moment');
 require('moment-timezone');
 moment.tz.setDefault("Asia/Seoul");
 
-var Donor = require('../model/donor');
+var Donor = require('../model/user');
 // var Event = require('../model/event');
 
 // passport.use(Donor.createStrategy());
