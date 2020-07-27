@@ -15,7 +15,6 @@ passport.deserializeUser(User.deserializeUser());
 module.exports = function(contract, account){
   /* GET home page. */
   router.get('/', function(req, res, next) {
-    console.log(req.user);
     res.render('index', { title: 'hello', user: req.user });
     // console.log(req.user.userId);
   });

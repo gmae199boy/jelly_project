@@ -50,10 +50,10 @@ module.exports = function(contract, account){
             }
             request(options, (err, response, body) =>{
                 if(err) {console.log(err); res.send(err);}
-                var json = JSON.parse(body);
-                console.log(json);
+                var result = JSON.parse(body);
+                console.log(result);
                 req.user.creditRecord.push({
-                    tid: json.tid,
+                    tid: result.tid,
                     partnerOrderId: 'TC0ONETIME',
                     partnerUserId: 'TC0ONETIME',
                     itemName: 'Jelly',
@@ -62,7 +62,7 @@ module.exports = function(contract, account){
                 });
                 req.user.save((err, result) => {
                     if(err) {console.log(err); res.send(err);}
-                    res.redirect(json.next_redirect_pc_url);
+                    res.redirect(result.next_redirect_pc_url);
                 })
             });
         });
@@ -88,13 +88,24 @@ module.exports = function(contract, account){
         request(options, (err, response, body) =>{
             if(err) {console.log(err); res.send(err);}
             console.log("결제 승인 페이지 입니다!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-            var json = JSON.parse(body);
-            console.log(json);
+            var result = JSON.parse(body);
+            console.log(result);
+
+            req.user.creditRecord[req.user.creditRecord.length-1].pgToken = pg_token;
+            //나중에 이더롸 통신할때 로직변경 필수.
+            req.user.wallet += result.amount.total;
+            //여기서 web3와 통신해서 사용자에게 토큰을 줘야한다.
             res.render('credit_complete', {
-                amount: json.amount.total,
+                amount: result.amount.total,
                 user: req.user,
             })
         });
     })
+
+/**
+ * 결제 취소, 환불 등 변수는 나중에 작성 필
+ */
+
+
     return router;
 }

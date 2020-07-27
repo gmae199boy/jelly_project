@@ -2,50 +2,71 @@ var express = require('express');
 var router = express.Router();
 var passport = require('passport');
 
+var query = require('../query/query');
+
 var moment = require('moment');
 require('moment-timezone');
 moment.tz.setDefault("Asia/Seoul");
 
-var Donor = require('../model/user');
-// var Event = require('../model/event');
+var User = require('../model/user');
+var Product = require('../model/product');
 
-// passport.use(Donor.createStrategy());
-// passport.serializeUser(Donor.serializeUser());
-// passport.deserializeUser(Donor.deserializeUser());
+passport.use(User.createStrategy());
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
 
 
 module.exports = function(contract, account){
     // index
     router.get('/', function(req, res, next) {
-        const page = req.body.page;
-        const perPage = 20;
-        Event.find({}, { _id: 0, eventId: 1, name: 1, type: 1, amount: 1, startDate: 1, endDate: 1, desc: 1, status: 1 })
-        .sort({ $natural: 1 })
-        .skip(page * perPage)
-        .limit(perPage)
-        .lean()
-        .exec((err, result) => {
-            if (err) {console.log(err); res.send('query err!');}
-            if (result) { // 전송 할 데이터가 있으면
-                res.render('eventList', {
-                    donor: req.donor,
-                    events: result
-                })
-            } else {
-                res.status(401).send('err');
-            }
+        if(req.query.productId !== undefined){
+            query.readProduct(req.query.productId, (err, result) => {
+                if (err) {console.log(err); res.send("readProduct query err!!")}
+                res.render('product', {
+                    user: req.user,
+                    product: result,
+                });
+            });
+            return;
+        }
+        query.readProductList(req.query.page, (err, result) => {
+            if(err) {console.log(err); res.send("readProductList query err!!");}
+            res.render('productList', {
+                user: req.user,
+                products: result,
+            });
         });
+        // //쿼리스트링으로 몇페이지인지 불러온다.
+        // const page = req.query.page;
+        // //한 페이지에 20개의 펀딩까지 보여준다.
+        // const perPage = 20;
+        // Event.find({}, { _id: 0, productId: 1, name: 1, type: 1, amount: 1, startDate: 1, endDate: 1, desc: 1, status: 1 })
+        // .sort({ $natural: 1 })
+        // .skip(page * perPage)
+        // .limit(perPage)
+        // .lean()
+        // .exec((err, result) => {
+        //     if (err) {console.log(err); res.send('query err!');}
+        //     if (result) { // 전송 할 데이터가 있으면
+        //         res.render('productList', {
+        //             user: req.user,
+        //             products: result,
+        //         })
+        //     } else {
+        //         res.send('전송할 데이터가 없음 (Product List)');
+        //     }
+        // });
     });
 
     router.route("/create")
         .get(function(req, res){
-            res.render('createEvent', {
-                donor: req.donor
+            res.render('createProduct', {
+                user: req.user,
             });
         })
         .post(function(req, res){
-            var date = req.body.startDate;
-            var event = new Event({
+            const date = req.body.startDate;
+            var product = new Product({
                 name: req.body.name,
                 type: req.body.type,
                 amount: req.body.amount,
@@ -53,18 +74,21 @@ module.exports = function(contract, account){
                 status: req.body.status,
                 startDate: moment(date).format("YYYY-MM-DD hh:mm")
             });
-            event.save(function(err, result){
-                if(err) {console.log(err); res.send('event save err!');}
+            product.save(function(err, result){
+                if(err) {console.log(err); res.send('product save err!');}
+                console.log("product create success");
+                res.redirect('/product');
+                //이더리움 통신
                 //console.log('시간 차이: ', moment.duration(moment().diff(result.startDate)).asHours());
-                contract.deployed().then(function(contractInstance){
-                    contractInstance.addEvent(
-                        result.eventId,
-                        {gas: 1000000, from: account}
-                    ).then(function(bool){
-                        if(bool) console.log("addEvent Successful!!");
-                        else console.log("addEvent Fail");
-                        res.redirect('/event');
-                    })
+                // contract.deployed().then(function(contractInstance){
+                //     contractInstance.addEvent(
+                //         result.eventId,
+                //         {gas: 1000000, from: account}
+                //     ).then(function(bool){
+                //         if(bool) console.log("add product Successful!!");
+                //         else console.log("add product Fail");
+                //         res.redirect('/product');
+                //     })
                         // result.name,
                         // result.type, 
                         // result.amount, 
@@ -74,14 +98,20 @@ module.exports = function(contract, account){
                         //     .then(function(){
                         //         res.redirect('/event');
                         //     })
-                })
+                // })
             })
         });
 
-    router.post('/donate/:id', function(req, res){
-        const email = req.body.email;
+    router.post('/funding', function(req, res){
+        const email = req.user.email;
         const amount = req.body.amount;
+        const productId = req.query.productId;
+
         if(amount <= 0) {console.log("기부 금액이 0보다 작거나 같음"); res.send("금액을 0보다 크게 입력해");}
+
+        query.readProduct(productId, (err, result) => {
+
+        })
 
     });
 
