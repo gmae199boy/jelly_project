@@ -76,7 +76,7 @@ web3.eth.getAccounts(function(err, accs){
 
   // Router
   var indexRouter = require('./router/index')(Jelly, account);
-  var eventRouter = require('./router/event')(Jelly, account);
+  var productRouter = require('./router/product')(Jelly, account);
   var signupRouter = require('./router/signup')(Jelly, account);
   var loginRouter = require('./router/login')(Jelly, account);
   // var joinRouter = require('./router/join');
@@ -85,10 +85,10 @@ web3.eth.getAccounts(function(err, accs){
   // var itemsRouter = require('./router/items');
   // var newRouter = require('./router/new');
   // var rateRouter = require('./router/rate');
-  // var mypageRouter = require('./router/mypage');
+  var mypageRouter = require('./router/mypage')(Jelly, account);
   
   app.use('/', indexRouter);
-  app.use('/event', eventRouter);
+  app.use('/product', productRouter);
   app.use('/signup', signupRouter);
   app.use('/login', loginRouter);
   app.use('/credit', creditRouter);
@@ -97,7 +97,7 @@ web3.eth.getAccounts(function(err, accs){
   // app.use('/items', itemsRouter);
   // app.use('/new', newRouter);
   // app.use('/rate', rateRouter);
-  // app.use('/mypage', mypageRouter);
+  app.use('/mypage', mypageRouter);
 
 
   // server start
