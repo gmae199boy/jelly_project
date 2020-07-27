@@ -5,6 +5,11 @@ var autoIncrement = require('mongoose-auto-increment');
 
 const userSchema = new mongoose.Schema({
     userId: { type: Number, unique: true }, // primary key
+    //userType은 유저가 donor이냐 recipient이냐를 나타내는 변수이다.
+    // donor: 기부자(구매자)
+    // recipient: 수혜자(받는이)
+    // (미구현) seller: 펀딩 오픈사
+    userType: {type: Number, required: true}, 
     name: {
         type: String,
         unique: true,
@@ -29,7 +34,7 @@ const userSchema = new mongoose.Schema({
     //     type: String,
     //     //required: true
     // }, // 기부자 주소
-    myEvents: [{
+    myProducts: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Event',
         donateAmount: Number
@@ -44,6 +49,7 @@ const userSchema = new mongoose.Schema({
         quantity: {type: Number},
         // createdAt: {}
     }], //사용자 결제 정보
+    wallet: {type: Number},// 외부 지갑 사용시 // 젤리 총량
 });
 // 플러그인 설정
 userSchema.plugin(passportLocalMongoose, { usernameField: 'email' });
