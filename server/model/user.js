@@ -9,7 +9,7 @@ const userSchema = new mongoose.Schema({
     // donor: 기부자(구매자)
     // recipient: 수혜자(받는이)
     // (미구현) seller: 펀딩 오픈사
-    userType: {type: Number, required: true}, 
+    userType: {type: Number, required: true}, // 0: donor, 1: recipient
     name: {
         type: String,
         unique: true,

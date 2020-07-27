@@ -18,7 +18,7 @@ passport.deserializeUser(User.deserializeUser());
 
 module.exports = function(contract, account){
     // index
-    router.get('/', function(req, res, next) {
+    router.get('/', function(req, res) {
         if(req.query.productId !== undefined){
             query.readProduct(req.query.productId, (err, result) => {
                 if (err) {console.log(err); res.send("readProduct query err!!")}
@@ -27,35 +27,14 @@ module.exports = function(contract, account){
                     product: result,
                 });
             });
-            return;
         }
-        query.readProductList(req.query.page, (err, result) => {
+        query.readProductList(req.query.page, req.query.status, (err, result) => {
             if(err) {console.log(err); res.send("readProductList query err!!");}
             res.render('productList', {
                 user: req.user,
                 products: result,
             });
         });
-        // //쿼리스트링으로 몇페이지인지 불러온다.
-        // const page = req.query.page;
-        // //한 페이지에 20개의 펀딩까지 보여준다.
-        // const perPage = 20;
-        // Event.find({}, { _id: 0, productId: 1, name: 1, type: 1, amount: 1, startDate: 1, endDate: 1, desc: 1, status: 1 })
-        // .sort({ $natural: 1 })
-        // .skip(page * perPage)
-        // .limit(perPage)
-        // .lean()
-        // .exec((err, result) => {
-        //     if (err) {console.log(err); res.send('query err!');}
-        //     if (result) { // 전송 할 데이터가 있으면
-        //         res.render('productList', {
-        //             user: req.user,
-        //             products: result,
-        //         })
-        //     } else {
-        //         res.send('전송할 데이터가 없음 (Product List)');
-        //     }
-        // });
     });
 
     router.route("/create")
@@ -110,9 +89,9 @@ module.exports = function(contract, account){
         if(amount <= 0) {console.log("기부 금액이 0보다 작거나 같음"); res.send("금액을 0보다 크게 입력해");}
 
         query.readProduct(productId, (err, result) => {
-
-        })
-
+            if(err) {console.log(err); res.send('readProduct query err!');}
+            res.send(result);
+        });
     });
 
 

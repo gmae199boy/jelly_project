@@ -19,9 +19,18 @@ query.readUserProducts = function(userId, callback) {
 }
 
 // 현재 진행중인 productList를 배열로 반환한다.
-query.readProductList = function(page, status = 2, callback) {
+query.readProductList = function(page = 0, status = 2, callback) {
     //status = 1 : 펀딩 진행 전, status = 2 : 펀딩 진행 중, status = 4 : 펀딩 종료
-    Product.find({status: status}, { _id: 0, productId: 1, name: 1, type: 1, amount: 1, startDate: 1, endDate: 1, desc: 1, status: 1 })
+    Product.find({status: status}, { 
+        _id: 0, 
+        productId: 1, 
+        name: 1, 
+        type: 1, 
+        amount: 1, 
+        startDate: 1, 
+        endDate: 1, 
+        desc: 1, 
+        status: 1 })
     .sort({ $natural: 1 })
     .skip(page * perPage)
     .limit(perPage)

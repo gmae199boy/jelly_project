@@ -70,6 +70,7 @@ module.exports = function(contract, account){
         name: req.body.name,
         email: req.body.email,
         password: req.body.password.toString(),
+        userType: parseInt(req.body.userType),
       });
 
       // DB에 회원등록
