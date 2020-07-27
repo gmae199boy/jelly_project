@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <%- include('partials/head') %>
+    </head>
+
+    <body>
+        <%- include('partials/navbar') %>
+        <div class="section">
+            <div class="header">
+                <li>Product Name : <%= product.name %></li>
+                <li>Product Desc : <%= product.desc %></li>
+                <li>Product Type : <%= product.type %></li>
+                <li>Product Amount : <%= product.amount %></li>
+                <li>Product Start Date : <%= product.startDate %></li>
+                <li>Product Status : <%= product.status %></li>
+            </div>
+            <div>
+                <!-- <a href="/event/update">수정하기</a> -->
+                <form action="/funding?productId=<%= product.productId %>">
+                    <!-- <input type="text" name="email" placeholder="이메일""> -->
+                    <input type="text" name="amount" placeholder="기부 금액">
+                    <input type="submit">
+                </form>
+            </div>
+        </div>
+    </body>
+</html>

@@ -8,7 +8,6 @@
         <div class="section">
             <div class="header">
                 <h1> My page </h1>
-                <h2> 관리 페이지</h2>   
             </div>
 
             <div class="profile-section">
@@ -19,45 +18,43 @@
 
 
             <ul class="nav nav-tabs">
-                <li role="presentation" id="my-item-btn" class="active"><a href="#">내가 만든 프로젝트</a></li>
-                <li role="presentation" id="join-item-btn"><a href="#">내가 참여중인 프로젝트</a></li>
-                <li role="presentation"><a href="#">완료한 프로젝트</a></li>
+                <li role="presentation" id="my-item-btn" class="active"><a href="#">내가 기부한 펀딩 목록</a></li>
+                <li role="presentation" id="join-item-btn"><a href="#">현재 진행중인 펀딩</a></li>
+                <!-- <li role="presentation"><a href="#">완료한 프로젝트</a></li> -->
             </ul>
             
 
             <div id="my-item">
-                <% if (items !== null){items.forEach((item)=>{ %>
-                    <% if(item.user == user.email) { %>
-                        <div class="list-group" style="margin-bottom: 0px !important;">
-                            <a href="/items/<%= item.itemId %>" class="list-group-item">
-                                <h4 class="list-group-item-heading"><%= item.name %> </h4>
-                                <p class="list-group-item-text"><%= item.detail %></p>
-                            </a>
-                        </div>
-                    <% } %>
+                <% if (user.myProducts !== null){user.myProducts.forEach((product)=>{ %>
+                    <div class="list-group" style="margin-bottom: 0px !important;">
+                        <a href="/product?<%= product.productId %>" class="list-group-item">
+                            <h4 class="list-group-item-heading"><%= product.name %> </h4>
+                            <p class="list-group-item-text"><%= product.amount %></p>
+                        </a>
+                    </div>
                 <%  })} %>
             </div>
 
-            <div id="join-item">
-                <% if (items !== null){items.forEach((item)=>{ %>
-                    <% item.applies.forEach((apply)=>{ %>
-                        <% if (apply.author == user.email && apply.status == "matched"){ %>
+            <!-- <div id="join-item">
+                <% //if (items !== null){items.forEach((item)=>{ %>
+                    <% //item.applies.forEach((apply)=>{ %>
+                        <% //if (apply.author == user.email && apply.status == "matched"){ %>
                             <div class="list-group" style="margin-bottom: 0px !important;">
-                                <a href="/items/<%= item.itemId %>" class="list-group-item">
-                                    <h4 class="list-group-item-heading"><%= item.name %> </h4>
-                                    <p class="list-group-item-text"><%= item.detail %></p>
+                                <a href="/items/<%= //item.itemId %>" class="list-group-item">
+                                    <h4 class="list-group-item-heading"><%= //item.name %> </h4>
+                                    <p class="list-group-item-text"><%= //item.detail %></p>
                                 </a>
                             </div>     
-                        <% } %>
-                    <% }) %> 
-                <%  })} %>
-            </div>
+                        <% //} %>
+                    <% //}) %> 
+                <%  //})} %>
+            </div> -->
         </div>
     </body>
 </html>
 
 
-<script>   
+<!-- <script>   
     $(document).ready(()=>{
         $("#join-item").hide();
     })
@@ -76,4 +73,4 @@
         $("#my-item").hide();
     })
 
-</script>
+</script> -->

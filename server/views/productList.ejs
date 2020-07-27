@@ -12,18 +12,18 @@
                 <% if(user == undefined){ %>
                     <div class="text-muted">로그인을 하셔야 글쓰기가 가능합니다.</div>
                 <% }else{ %>
-                    <a href="/new"><button class="btn btn-info"> 새 아이템 추가하기</button></a>
+                    <a href="/new"><button class="btn btn-info"> 새 펀딩 추가하기</button></a>
                 <% } %>
             </div>
 
             <div class="row">
-                <% if (events !== null){events.forEach((event)=>{ %>
+                <% if (products !== null){products.forEach((product)=>{ %>
                 <div class="col-lg-4">
-                    <a href="/event/<%= event.eventId %>">
+                    <a href="/product?productId=<%= product.productId %>">
                         <div class="card">
                             <div class="card-image"></div>
-                            <div class="card-title"><%= event.name %></div>
-                            <div class="card-comment"><%= event.desc %> </div>
+                            <div class="card-title"><%= product.name %></div>
+                            <div class="card-comment"><%= product.desc %> </div>
                         </div>
                     </a>
                 </div>
