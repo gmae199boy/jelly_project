@@ -8,7 +8,7 @@ var query = {};
 const perPage = 20;
 
 // 유저가 참여한 product의 목록을 배열로 리턴한다.
-query.readUserProducts = function(userId, callback) {
+query.getUserProducts = function(userId, callback) {
     User.find({userId: userId}, {myProducts: 1})
     .populate('myProducts')
     .exec((err, result) => {
@@ -19,7 +19,7 @@ query.readUserProducts = function(userId, callback) {
 }
 
 // 현재 진행중인 productList를 배열로 반환한다.
-query.readProductList = function(page = 0, status = 2, callback) {
+query.getProductList = function(page = 0, status = 2, callback) {
     //status = 1 : 펀딩 진행 전, status = 2 : 펀딩 진행 중, status = 4 : 펀딩 종료
     Product.find({status: status}, { 
         _id: 0, 
@@ -47,7 +47,7 @@ query.readProductList = function(page = 0, status = 2, callback) {
     });
 }
 
-query.readProduct = function(productId, callback) {
+query.getProduct = function(productId, callback) {
     Product.findOne({productId: productId}).exec((err, result) => {
         if (err) {callback(err, null); return;}
         callback(null, result);
