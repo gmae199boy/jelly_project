@@ -94,11 +94,15 @@ module.exports = function(contract, account){
             req.user.creditRecord[req.user.creditRecord.length-1].pgToken = pg_token;
             //나중에 이더롸 통신할때 로직변경 필수.
             req.user.wallet += result.amount.total;
-            //여기서 web3와 통신해서 사용자에게 토큰을 줘야한다.
-            res.render('credit_complete', {
-                amount: result.amount.total,
-                user: req.user,
-            })
+
+            req.user.save((err, result) => {
+                if(err) {console.log(err); res.send(err);}
+                //여기서 web3와 통신해서 사용자에게 토큰을 줘야한다.
+                res.render('credit_complete', {
+                    amount: result.amount.total,
+                    user: req.user,
+                })
+            });
         });
     })
 

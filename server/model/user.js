@@ -35,9 +35,11 @@ const userSchema = new mongoose.Schema({
     //     //required: true
     // }, // 기부자 주소
     myProducts: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Event',
-        donateAmount: Number
+        id: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Event',
+        },
+        amount: {type: Number,}
     }], // 기부자가 지금까지 기부했던 기부 목록
     creditRecord: [{
         tid: {type: String, index: true},

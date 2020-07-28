@@ -3,6 +3,7 @@ var router = express.Router();
 var passport = require('passport');
 
 var query = require('../query/query');
+var queryPromise = require('../query/query_promise');
 
 var moment = require('moment');
 require('moment-timezone');
@@ -19,22 +20,48 @@ passport.deserializeUser(User.deserializeUser());
 module.exports = function(contract, account){
     // index
     router.get('/', function(req, res) {
+        // promise query
         if(req.query.productId !== undefined){
-            query.readProduct(req.query.productId, (err, result) => {
-                if (err) {console.log(err); res.send("readProduct query err!!")}
+            queryPromise.getProduct(req.query.productId)
+            .then((result) => {
                 res.render('product', {
                     user: req.user,
                     product: result,
                 });
-            });
+            })
+            .catch((err) => {
+                res.send(err);
+            })
+            return;
+
+            // normal query
+            // query.getProduct(req.query.productId, (err, result) => {
+            //     if (err) {console.log(err); res.send("readProduct query err!!")}
+            //     res.render('product', {
+            //         user: req.user,
+            //         product: result,
+            //     });
+            // });
         }
-        query.readProductList(req.query.page, req.query.status, (err, result) => {
-            if(err) {console.log(err); res.send("readProductList query err!!");}
+        // promise query
+        queryPromise.getProductList(req.query.page, req.query.status)
+        .then((result) => {
             res.render('productList', {
                 user: req.user,
                 products: result,
             });
-        });
+        }).catch((err) => {
+            res.send(err);
+        })
+
+        // normal query
+        // query.getProductList(req.query.page, req.query.status, (err, result) => {
+        //     if(err) {console.log(err); res.send("readProductList query err!!");}
+        //     res.render('productList', {
+        //         user: req.user,
+        //         products: result,
+        //     });
+        // });
     });
 
     router.route("/create")
@@ -53,11 +80,11 @@ module.exports = function(contract, account){
                 status: req.body.status,
                 startDate: moment(date).format("YYYY-MM-DD hh:mm")
             });
-            product.save(function(err, result){
-                if(err) {console.log(err); res.send('product save err!');}
-                console.log("product create success");
+
+            // promise query
+            queryPromise.setProduct(product).then((result) => {
                 res.redirect('/product');
-                //이더리움 통신
+                                //이더리움 통신
                 //console.log('시간 차이: ', moment.duration(moment().diff(result.startDate)).asHours());
                 // contract.deployed().then(function(contractInstance){
                 //     contractInstance.addEvent(
@@ -78,20 +105,37 @@ module.exports = function(contract, account){
                         //         res.redirect('/event');
                         //     })
                 // })
-            })
+            }).catch((err) => {
+                console.log(err);
+                res.send(err);
+            });
         });
 
     router.post('/funding', function(req, res){
-        const email = req.user.email;
         const amount = req.body.amount;
         const productId = req.query.productId;
 
         if(amount <= 0) {console.log("기부 금액이 0보다 작거나 같음"); res.send("금액을 0보다 크게 입력해");}
 
-        query.readProduct(productId, (err, result) => {
-            if(err) {console.log(err); res.send('readProduct query err!');}
-            res.send(result);
-        });
+        // promise query
+        queryPromise.getProduct(productId)
+        .then((product) => {
+            product.productDetails.push({id: req.user._id, amount: amount});
+            return queryPromise.setProduct(product);
+        }).catch((err) => {res.send(err);}).then((result) => {
+            console.log(result);
+            req.user.myProducts.push({id: result._id, amount: amount});
+            return queryPromise.setUserData(req.user);
+        }).catch((err) => {res.send(err);}).then((result) => {
+            console.log(req.user);
+            res.redirect('/product');
+        })
+
+        // normal query
+        // query.getProduct(productId, (err, result) => {
+        //     if(err) {console.log(err); res.send('readProduct query err!');}
+        //     res.send(result);
+        // });
     });
 
 
@@ -114,7 +158,7 @@ module.exports = function(contract, account){
         /**
          * Query for mongodb
          */
-        Event.findOne({ eventId: req.params.id }, (err, event)=>{
+        Product.findOne({ eventId: req.params.id }, (err, event)=>{
             if(err) {console.log(err); res.send('query err!');}
             console.log(event);
             res.render('event', {
