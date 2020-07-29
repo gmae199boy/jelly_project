@@ -116,7 +116,6 @@ module.exports = function(contract, account){
         const productId = req.query.productId;
 
         if(amount <= 0) {console.log("기부 금액이 0보다 작거나 같음"); res.send("금액을 0보다 크게 입력해");}
-
         // promise query
         queryPromise.getProduct(productId)
         .then((product) => {
