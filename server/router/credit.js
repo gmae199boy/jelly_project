@@ -91,44 +91,46 @@ module.exports = function(contract, account){
             console.log("결제 승인 페이지 입니다!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
             var resultJson = JSON.parse(body);
             console.log(resultJson);
+            req.user.creditRecord[req.user.creditRecord.length-1].pgToken = pg_token;
+            //나중에 이더와 통신할때 로직변경 필수.
+            req.user.wallet += parseInt(resultJson.amount.total);
 
-            //이더 통신
-            // console.log('시간 차이: ', moment.duration(moment().diff(result.startDate)).asHours());
-            contract.deployed().then(function(contractInstance){
-                contractInstance.transfer(
-                    "0x0539c8DFd0153342E62201A3ce4A45C6788C679F",
-                    "0xD69DEaE92Fa553150A4D58542e674D9Da67c61a5",
-                    100000,
-                    {gas: 1000000, from: account}
-                ).then(function(bool){
-                    if(bool) console.log("add product Successful!!");
-                    else console.log("add product Fail");
-
-                    console.log(resultJson.amount)
-                    console.log(resultJson.amount.total)
-                    console.log(typeof(resultJson.amount.total))
-                    
-
-                    req.user.creditRecord[req.user.creditRecord.length-1].pgToken = pg_token;
-                    //나중에 이더롸 통신할때 로직변경 필수.
-                    req.user.wallet += parseInt(resultJson.amount.total);
-        
-                    req.user.save((err, result) => {
-                        if(err) {console.log(err); res.send(err);}
-                        //여기서 web3와 통신해서 사용자에게 토큰을 줘야한다.
-                        res.render('credit_complete', {
-                            amount: resultJson.amount.total,
-                            user: req.user,
-                        })
-                    });
-
-
-
-
-
-                    // res.redirect('/product');
+            req.user.save((err, result) => {
+                if(err) {console.log(err); res.send(err);}
+                //여기서 web3와 통신해서 사용자에게 토큰을 줘야한다.
+                res.render('credit_complete', {
+                    amount: resultJson.amount.total,
+                    user: req.user,
                 })
             });
+
+            // 체인 코드 개선중.....
+            //이더 통신
+            // console.log('시간 차이: ', moment.duration(moment().diff(result.startDate)).asHours());
+            // contract.deployed().then(function(contractInstance){
+            //     contractInstance.transfer(
+            //         "0x0539c8DFd0153342E62201A3ce4A45C6788C679F",
+            //         "0xD69DEaE92Fa553150A4D58542e674D9Da67c61a5",
+            //         100000,
+            //         {gas: 1000000, from: account}
+            //     ).then(function(bool){
+            //         if(bool) console.log("add product Successful!!");
+            //         else console.log("add product Fail");
+            //         req.user.creditRecord[req.user.creditRecord.length-1].pgToken = pg_token;
+            //         //나중에 이더롸 통신할때 로직변경 필수.
+            //         req.user.wallet += parseInt(resultJson.amount.total);
+        
+            //         req.user.save((err, result) => {
+            //             if(err) {console.log(err); res.send(err);}
+            //             //여기서 web3와 통신해서 사용자에게 토큰을 줘야한다.
+            //             res.render('credit_complete', {
+            //                 amount: resultJson.amount.total,
+            //                 user: req.user,
+            //             })
+            //         });
+            //         // res.redirect('/product');
+            //     })
+            // });
 
         });
     })

@@ -115,7 +115,8 @@ module.exports = function(contract, account){
         const amount = req.body.amount;
         const productId = req.query.productId;
 
-        if(amount <= 0) {console.log("기부 금액이 0보다 작거나 같음"); res.send("금액을 0보다 크게 입력해");}
+        if(amount <= 0) {console.log("기부 금액이 0보다 작거나 같음"); res.send("금액을 0보다 크게 입력해"); return;}
+        if(amount > req.user.wallet) {console.log("지갑에 잔액이 충분하지 않음."); res.send("지갑 금액 부족."); return;}
         // promise query
         // findOneAndUpdate 적용판
         var productResult;
@@ -123,6 +124,7 @@ module.exports = function(contract, account){
         queryPromise.updateProduct(productId, productDetails).then((result) => {
             productResult = result;
             req.user.myProducts.push({id: result._id, amount: amount,});
+            req.user.wallet -= amount;
             return queryPromise.setUserData(req.user);
         }).then((result) => {
             console.log('펀딩 성공!!! 얼마나 펀딩했습니까? = ' + result.myProducts[result.myProducts.length - 1].amount);
@@ -225,17 +227,5 @@ module.exports = function(contract, account){
     //         res.redirect('/');
     //     })
     // });
-
-    // // admit an apply
-    // router.post('/:id/admit', function(req, res, next){
-    //     var index = req.body.index;
-    //     Item.findOne({ itemId: req.params.id }, function(err, item){
-    //         if(err) return res.json({success:false, message:err});
-    //         item.applies[index].$set({status: "matched"});
-    //         item.save();
-    //         console.log(item.applies[index].status);
-    //         res.redirect('/')
-    //     })
-    // })
     return router;
 }

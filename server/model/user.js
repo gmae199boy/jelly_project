@@ -37,7 +37,7 @@ const userSchema = new mongoose.Schema({
     myProducts: [{
         id: {
             type: mongoose.Schema.Types.ObjectId,
-            ref: 'Event',
+            ref: 'Product',
         },
         amount: {type: Number, default: 0,}
     }], // 기부자가 지금까지 기부했던 기부 목록

@@ -85,4 +85,15 @@ queryPromise.setUserData = function(user) {
     });
 }
 
+queryPromise.getPopulatedProductList = function(userId) {
+    return new Promise((resolve, reject) => {
+        User.findOne({userId: userId}).populate('myProducts.id', 
+            'productId name amount'
+        ).exec((err, result) => {
+            if(err) reject(err);
+            resolve(result);
+        });
+    })
+}
+
 module.exports = queryPromise;
