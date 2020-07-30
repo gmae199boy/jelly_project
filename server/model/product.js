@@ -14,7 +14,7 @@ const productSchema = new mongoose.Schema({
         type: Number, // 1: 진행 전, 2: 진행 중, 4: 진행 종료
         // required: true
     },       // 이벤트 상태 (모금 중, 모금 종료 등) 
-    productDetail:[{
+    productDetails:[{
         id: {
             type: mongoose.Schema.Types.ObjectId, //이름만 저장할지 레퍼런스로 넣어야하는지.
             ref: 'User',

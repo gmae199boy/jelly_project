@@ -117,23 +117,29 @@ module.exports = function(contract, account){
 
         if(amount <= 0) {console.log("기부 금액이 0보다 작거나 같음"); res.send("금액을 0보다 크게 입력해");}
         // promise query
-        queryPromise.getProduct(productId)
-        .then((product) => {
-            if(product.productDetails == undefined) {
-                product.productDetails = new Array();
-            }
-            product.productDetails.push({id: req.user._id, amount: amount});
-            return queryPromise.setProduct(product);
+        queryPromise.updateProduct(productId, productDetails, {
+            id: req.user._id, amount: amount,
         }).then((result) => {
-            req.user.myProducts.push({id: result._id, amount: amount});
+            req.user.myProducts.push({id: result._id, amount: amount,});
             return queryPromise.setUserData(req.user);
         }).then((result) => {
             console.log(result);
             res.redirect('/product');
-        }).catch((err) => {
-            console.log(err);
-            res.send(err);
-        })
+        });
+        // queryPromise.getProduct(productId)
+        // .then((product) => {
+        //     product.productDetails.push({id: req.user._id, amount: amount});
+        //     return queryPromise.setProduct(product);
+        // }).then((result) => {
+        //     req.user.myProducts.push({id: result._id, amount: amount});
+        //     return queryPromise.setUserData(req.user);
+        // }).then((result) => {
+        //     console.log(result);
+        //     res.redirect('/product');
+        // }).catch((err) => {
+        //     console.log(err);
+        //     res.send(err);
+        // })
 
         // normal query
         // query.getProduct(productId, (err, result) => {
