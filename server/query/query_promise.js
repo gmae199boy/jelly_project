@@ -48,8 +48,6 @@ queryPromise.getProduct = function(productId) {
     return new Promise((resolve, reject) => {
         Product.findOne({productId: productId}).exec((err, result) => {
             if (err) {reject(err);}
-            console.log("productId = " + productId);
-            console.log(result);
             resolve(result);
         });
     });
@@ -72,6 +70,7 @@ queryPromise.updateProduct = function(productId, update) {
             {new: true})
             .exec((err, result) => {
                 if(err) reject(err);
+                console.log(result);
                 resolve(result);
             })
     })

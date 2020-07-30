@@ -117,15 +117,22 @@ module.exports = function(contract, account){
 
         if(amount <= 0) {console.log("기부 금액이 0보다 작거나 같음"); res.send("금액을 0보다 크게 입력해");}
         // promise query
-        queryPromise.updateProduct(productId, productDetails, {
-            id: req.user._id, amount: amount,
-        }).then((result) => {
+        // findOneAndUpdate 적용판
+        var productResult;
+        var productDetails = {$push: {'productDetails': {'id': req.user._id, 'amount': amount,}}}
+        queryPromise.updateProduct(productId, productDetails).then((result) => {
+            productResult = result;
             req.user.myProducts.push({id: result._id, amount: amount,});
             return queryPromise.setUserData(req.user);
         }).then((result) => {
-            console.log(result);
-            res.redirect('/product');
+            console.log('펀딩 성공!!! 얼마나 펀딩했습니까? = ' + result.myProducts[result.myProducts.length - 1].amount);
+            console.log(req.user);
+            res.render('product', {
+                user: req.user,
+                product: productResult,
+            })
         });
+        // save 판
         // queryPromise.getProduct(productId)
         // .then((product) => {
         //     product.productDetails.push({id: req.user._id, amount: amount});
