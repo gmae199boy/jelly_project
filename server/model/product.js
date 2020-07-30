@@ -4,7 +4,7 @@ var autoIncrement = require('mongoose-auto-increment');
 require('mongoose-moment')(mongoose);
 
 const productSchema = new mongoose.Schema({
-    productId: {type: Number},
+    productId: {type: Number, unique: true},
     name: String,            // 이벤트 이름
     amount: {type: Number},  // 이벤트 목표 금액
     startDate: 'Moment',     // 이벤트 시작 시간
@@ -19,7 +19,7 @@ const productSchema = new mongoose.Schema({
             type: mongoose.Schema.Types.ObjectId, //이름만 저장할지 레퍼런스로 넣어야하는지.
             ref: 'User',
         },
-        amount: {type: Number, required: true},
+        amount: {type: Number, required: true, default: 0},
     }],
 });
 

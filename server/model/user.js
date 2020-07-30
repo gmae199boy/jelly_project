@@ -9,7 +9,7 @@ const userSchema = new mongoose.Schema({
     // donor: 기부자(구매자)
     // recipient: 수혜자(받는이)
     // (미구현) seller: 펀딩 오픈사
-    userType: {type: Number, required: true}, // 0: donor, 1: recipient
+    userType: {type: Number, required: true, default: 0,}, // 0: donor, 1: recipient
     name: {
         type: String,
         unique: true,
@@ -39,7 +39,7 @@ const userSchema = new mongoose.Schema({
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Event',
         },
-        amount: {type: Number,}
+        amount: {type: Number, default: 0,}
     }], // 기부자가 지금까지 기부했던 기부 목록
     creditRecord: [{
         tid: {type: String, index: true},
@@ -47,11 +47,11 @@ const userSchema = new mongoose.Schema({
         partnerOrderId: {type: String},
         partnerUserId: {type: String},
         itemName: {type: String},
-        totalAmount: {type: Number},
-        quantity: {type: Number},
+        totalAmount: {type: Number, default: 0},
+        quantity: {type: Number, default: 0},
         // createdAt: {}
     }], //사용자 결제 정보
-    wallet: {type: Number},// 외부 지갑 사용시 // 젤리 총량
+    wallet: {type: Number, default: 0},// 외부 지갑 사용시 // 젤리 총량
 });
 // 플러그인 설정
 userSchema.plugin(passportLocalMongoose, { usernameField: 'email' });
@@ -62,8 +62,6 @@ userSchema.plugin(autoIncrement.plugin, {
     startAt: 0, //시작 
     increment: 1 // 증가
 });
-
-// const model = mongoose.model('User', userSchema);
 
 // export default model;
 module.exports = mongoose.model('User', userSchema);

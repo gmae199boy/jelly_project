@@ -84,7 +84,7 @@ module.exports = function(contract, account){
             // promise query
             queryPromise.setProduct(product).then((result) => {
                 res.redirect('/product');
-                                //이더리움 통신
+                //이더리움 통신
                 //console.log('시간 차이: ', moment.duration(moment().diff(result.startDate)).asHours());
                 // contract.deployed().then(function(contractInstance){
                 //     contractInstance.addEvent(
@@ -100,7 +100,7 @@ module.exports = function(contract, account){
                         // result.amount, 
                         // moment(result.startDate).format('YYYY-MM-DD hh:mm'), 
                         // moment(result.endDate).format('YYYY-MM-DD hh:mm'),
-                        // result.desc, result.status, {gas: 500000, from: account})
+                        // result.desc, result.status, {gas: 500000, from: accot})
                         //     .then(function(){
                         //         res.redirect('/event');
                         //     })
@@ -119,15 +119,20 @@ module.exports = function(contract, account){
         // promise query
         queryPromise.getProduct(productId)
         .then((product) => {
+            if(product.productDetails == undefined) {
+                product.productDetails = new Array();
+            }
             product.productDetails.push({id: req.user._id, amount: amount});
             return queryPromise.setProduct(product);
-        }).catch((err) => {res.send(err);}).then((result) => {
-            console.log(result);
+        }).then((result) => {
             req.user.myProducts.push({id: result._id, amount: amount});
             return queryPromise.setUserData(req.user);
-        }).catch((err) => {res.send(err);}).then((result) => {
-            console.log(req.user);
+        }).then((result) => {
+            console.log(result);
             res.redirect('/product');
+        }).catch((err) => {
+            console.log(err);
+            res.send(err);
         })
 
         // normal query

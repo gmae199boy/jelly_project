@@ -46,8 +46,10 @@ queryPromise.getProductList = function(page = 0, status = 2) {
 
 queryPromise.getProduct = function(productId) {
     return new Promise((resolve, reject) => {
-        Product.findOne({productId: productId}).exec((err, result) => {
+        Product.findOne({productId}).exec((err, result) => {
             if (err) {reject(err);}
+            console.log("productId = " + productId);
+            console.log(result);
             resolve(result);
         });
     });
@@ -59,6 +61,12 @@ queryPromise.setProduct = function(product) {
             if(err) reject(err);
             resolve(result);
         })
+    })
+}
+
+queryPromise.updateProduct = function(product) {
+    return Promise((resolve, reject) => {
+        Product.findOneAndUpdate({productId: product.productId}, )
     })
 }
 

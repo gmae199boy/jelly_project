@@ -18,7 +18,6 @@ module.exports = function(contract, account){
 
     router.post('/', passport.authenticate('local', { failureRedirect: '/login', failureFlash: true}), function(req, res) {
         console.log('로그인 성공');
-        console.log(req.user);
         res.redirect('/');
 
 

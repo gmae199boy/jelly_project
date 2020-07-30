@@ -3,7 +3,6 @@ var router = express.Router();
 
 var passport = require('passport');
 
-
 // session for mongoose passport
 var User = require('../model/user');
 
