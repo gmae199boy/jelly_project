@@ -2,7 +2,7 @@ var mongoose = require('mongoose');
 var autoIncrement = require('mongoose-auto-increment');
 require('mongoose-moment')(mongoose);
 
-const productSchema = new mongoose.Schema({
+const mallSchema = new mongoose.Schema({
     productId: {type: Number, unique: true},
     name: String,            // 이벤트 이름
     amount: {type: Number},  // 이벤트 목표 금액
@@ -22,7 +22,7 @@ const productSchema = new mongoose.Schema({
     }],
 });
 
-productSchema.plugin(autoIncrement.plugin,{
+mallSchema.plugin(autoIncrement.plugin,{
 	model : 'Product',
 	field : 'productId',
 	startAt : 0, //시작
@@ -30,27 +30,3 @@ productSchema.plugin(autoIncrement.plugin,{
 });
 
 module.exports = mongoose.model('Product', productSchema);
-
-
-const QRCode = require("qrcode");
-
-
-app.get("/", (req, res) => {
-  const inputText = `
-    첫번째 생성하는 QR 코드
-  `;
-
-  QRCode.toDataURL(inputText, (err, url) => {
-    const data = url.replace(/.*,/, "");
-    const img = new Buffer(data, "base64");
-
-    res.writeHead(200, {
-      "Content-Type": "image/png",
-      "Content-Length": img.length
-    });
-
-    res.end(img);
-  });
-});
-
-app.listen(3000, () => console.log("http://localhost:3000"));

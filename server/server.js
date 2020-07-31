@@ -79,7 +79,7 @@ web3.eth.getAccounts(function(err, accs){
   var productRouter = require('./router/product')(Jelly, account);
   var signupRouter = require('./router/signup')(Jelly, account);
   var loginRouter = require('./router/login')(Jelly, account);
-  // var joinRouter = require('./router/join');
+  var mallRouter = require('./router/mall')(Jelly, account);
   var logoutRouter = require('./router/logout')(Jelly, account);
   var creditRouter = require('./router/credit')(Jelly, account);
   // var itemsRouter = require('./router/items');
@@ -92,7 +92,7 @@ web3.eth.getAccounts(function(err, accs){
   app.use('/signup', signupRouter);
   app.use('/login', loginRouter);
   app.use('/credit', creditRouter);
-  // app.use('/join', joinRouter);
+  app.use('/mall', mallRouter);
   app.use('/logout', logoutRouter);
   // app.use('/items', itemsRouter);
   // app.use('/new', newRouter);

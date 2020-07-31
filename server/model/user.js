@@ -10,22 +10,25 @@ const userSchema = new mongoose.Schema({
     // recipient: 수혜자(받는이)
     // (미구현) seller: 펀딩 오픈사
     userType: {type: Number, required: true, default: 0,}, // 0: donor, 1: recipient
+    // 기부자 이름 or 닉네임
     name: {
         type: String,
         unique: true,
         //required: true,
         //index: true
-    },  // 기부자 이름 or 닉네임
+    },  
+    // 유저 이메일
     email: {
         type: String,
         //required: true,
         unique: true,
         index: true
-    }, // 기부자 이메일
+    }, 
+    // 유저 아이디의 비밀번호
     password: {
         type: String,
         //required: true
-    }, // 기부자 아이디의 비밀번호
+    }, 
     // phoneNumber: {
     //     type: String,
     //     //required: true
@@ -34,13 +37,15 @@ const userSchema = new mongoose.Schema({
     //     type: String,
     //     //required: true
     // }, // 기부자 주소
+    // 기부자가 지금까지 기부했던 기부 목록 // 수혜자가 받은 펀딩, 금액
     myProducts: [{
         id: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Product',
-        },
-        amount: {type: Number, default: 0,}
-    }], // 기부자가 지금까지 기부했던 기부 목록
+        }, // Product 컬렉션 참조 ID
+        amount: {type: Number, default: 0,} // 기부금
+    }],
+    // 기부자 결제 정보
     creditRecord: [{
         tid: {type: String, index: true},
         pgToken: {type: String},
@@ -50,8 +55,10 @@ const userSchema = new mongoose.Schema({
         totalAmount: {type: Number, default: 0},
         quantity: {type: Number, default: 0},
         // createdAt: {}
-    }], //사용자 결제 정보
-    wallet: {type: Number, default: 0},// 외부 지갑 사용시 // 젤리 총량
+    }], 
+    // 기부자 결제 젤리 총량
+    wallet: {type: Number, default: 0}, 
+    
 });
 // 플러그인 설정
 userSchema.plugin(passportLocalMongoose, { usernameField: 'email' });
