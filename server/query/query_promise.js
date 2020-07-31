@@ -1,6 +1,6 @@
 var User = require("../model/user");
 var Product = require("../model/product");
-
+var Mall = require('../model/mall');
 var queryPromise = {};
 
 //한 페이지에 20개의 펀딩까지 보여준다.
@@ -93,6 +93,30 @@ queryPromise.getPopulatedProductList = function(userId) {
             if(err) reject(err);
             resolve(result);
         });
+    })
+}
+
+queryPromise.getMallList = function(page = 0, status = 2){
+    return new Promise((resolve, reject) => {
+        //status = 1 : 펀딩 진행 전, status = 2 : 펀딩 진행 중, status = 4 : 펀딩 종료
+        Mall.find({status: status})
+        .sort({ $natural: 1 })
+        .skip(page * perPage)
+        .limit(perPage)
+        .lean()
+        .exec((err, result) => {
+            if (err) {reject(err);}
+            resolve(result);
+        });
+    });
+}
+
+queryPromise.setMallList = function(mall) {
+    return new Promise((resolve, reject) => {
+        mall.save((err, result) => {
+            if(err) reject(err);
+            resolve(result);
+        })
     })
 }
 
