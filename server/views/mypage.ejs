@@ -1,25 +1,62 @@
 <html>
     <head>
         <%- include('partials/head') %>
+        <link href="css/styles.css" rel="stylesheet">
     </head>
 
     <body>
         <%- include('partials/navbar') %>
+        <div style = "padding: 50px 10px;"></div>
         <div class="section">
             <div class="header">
-                <h1> My page </h1>
+                <h1> My page </h1> <br>
             </div>
 
             <div class="profile-section">
-                <div class="profile-info">이름: <%= user.name %></div>
-                <div class="profile-info">이메일: <%= user.email %></div>
-
+                
+                    <% if (user.userType == 0) { %>
+                        <div class="profile-info" display="inline-block"><p style="font-size: 30px; color:white;"> 기부자 이름: <%= user.name %></p></div>
+                    <% } else { %>
+                        <div class="profile-info" display="inline-block"><p style="font-size: 30px; color:white;"> 기부자 이름: <%= user.name %></p></div>
+                    <% } %>
+                    <br>    
             </div>
+
+            <table class="table">
+                <thead>
+                  <tr>
+                    <th scope="col"> </th>
+                    <th scope="col">First</th>
+                    <th scope="col">Last</th>
+                    <th scope="col">Handle</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <th scope="row">1</th>
+                    <td>Mark</td>
+                    <td>Otto</td>
+                    <td>@mdo</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">2</th>
+                    <td>Jacob</td>
+                    <td>Thornton</td>
+                    <td>@fat</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">3</th>
+                    <td>Larry</td>
+                    <td>the Bird</td>
+                    <td>@twitter</td>
+                  </tr>
+                </tbody>
+              </table>
 
 
             <ul class="nav nav-tabs">
-                <li role="presentation" id="my-item-btn" class="active"><a href="#">내가 기부한 펀딩 목록</a></li>
-                <li role="presentation" id="join-item-btn"><a href="#">현재 진행중인 펀딩</a></li>
+                <li role="presentation" id="my-item-btn" class="active"><a href="#">내가 기부한 JELLY 목록</a></li>
+                <!-- <li role="presentation" id="join-item-btn"><a href="#">현재 진행중인 펀딩</a></li> -->
                 <!-- <li role="presentation"><a href="#">완료한 프로젝트</a></li> -->
             </ul>
             
