@@ -3,7 +3,7 @@ var router = express.Router();
 var passport = require('passport');
 
 var query = require('../query/query');
-var queryPromise = require('../query/query_promise');
+const queryPromise = require('../query/query_promise');
 
 var moment = require('moment');
 require('moment-timezone');

@@ -55,13 +55,15 @@ const userSchema = new mongoose.Schema({
         totalAmount: {type: Number, default: 0},
         quantity: {type: Number, default: 0},
         // createdAt: {}
-    }], 
+    }],
     purchaseList: [{
         id: {
             type: mongoose.Schema.Types.ObjectId,
             ref: "Mall",
         },
         qrCode: {type: Buffer,},
+        quantity: {type: Number},
+        amount: {type: Number},
     }],
     // 기부자 결제 젤리 총량
     wallet: {type: Number, default: 0}, 

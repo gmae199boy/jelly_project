@@ -96,10 +96,10 @@ queryPromise.getPopulatedProductList = function(userId) {
     })
 }
 
-queryPromise.getMallList = function(page = 0, status = 2){
+queryPromise.getMallList = function(page = 0){
     return new Promise((resolve, reject) => {
         //status = 1 : 펀딩 진행 전, status = 2 : 펀딩 진행 중, status = 4 : 펀딩 종료
-        Mall.find({status: status})
+        Mall.find({})
         .sort({ $natural: 1 })
         .skip(page * perPage)
         .limit(perPage)
@@ -109,6 +109,15 @@ queryPromise.getMallList = function(page = 0, status = 2){
             resolve(result);
         });
     });
+}
+
+queryPromise.getMallDetail = function(mallId) {
+    return new Promise((resolve, reject) => {
+        Mall.findOne({mallId: mallId}).exec((err, result) => {
+            if(err) reject(err);
+            resolve(result);
+        })
+    })
 }
 
 queryPromise.setMallList = function(mall) {

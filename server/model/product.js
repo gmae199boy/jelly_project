@@ -33,24 +33,3 @@ module.exports = mongoose.model('Product', productSchema);
 
 
 const QRCode = require("qrcode");
-
-
-// app.get("/", (req, res) => {
-//   const inputText = `
-//     첫번째 생성하는 QR 코드
-//   `;
-
-//   QRCode.toDataURL(inputText, (err, url) => {
-//     const data = url.replace(/.*,/, "");
-//     const img = new Buffer(data, "base64");
-
-//     res.writeHead(200, {
-//       "Content-Type": "image/png",
-//       "Content-Length": img.length
-//     });
-
-//     res.end(img);
-//   });
-// });
-
-// app.listen(3000, () => console.log("http://localhost:3000"));
