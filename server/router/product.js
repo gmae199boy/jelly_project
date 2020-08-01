@@ -21,29 +21,6 @@ module.exports = function(contract, account){
     // index
     router.get('/', function(req, res) {
         // promise query
-        if(req.query.productId !== undefined){
-            queryPromise.getProduct(req.query.productId)
-            .then((result) => {
-                res.render('product', {
-                    user: req.user,
-                    product: result,
-                });
-            })
-            .catch((err) => {
-                res.send(err);
-            })
-            return;
-
-            // normal query
-            // query.getProduct(req.query.productId, (err, result) => {
-            //     if (err) {console.log(err); res.send("readProduct query err!!")}
-            //     res.render('product', {
-            //         user: req.user,
-            //         product: result,
-            //     });
-            // });
-        }
-        // promise query
         queryPromise.getProductList(req.query.page, req.query.status)
         .then((result) => {
             res.render('productList', {
@@ -160,6 +137,25 @@ module.exports = function(contract, account){
 
     // show
     router.get('/:id', function(req, res){
+        // promise query
+        queryPromise.getProduct(req.params.id)
+        .then((result) => {
+            res.render('product', {
+                user: req.user,
+                product: result,
+            });
+        })
+        .catch((err) => {
+            res.send(err);
+        })
+        // normal query
+        // query.getProduct(req.query.productId, (err, result) => {
+        //     if (err) {console.log(err); res.send("readProduct query err!!")}
+        //     res.render('product', {
+        //         user: req.user,
+        //         product: result,
+        //     });
+        // });
         /**
          * Query for ethereum
          */
@@ -177,14 +173,14 @@ module.exports = function(contract, account){
         /**
          * Query for mongodb
          */
-        Product.findOne({ eventId: req.params.id }, (err, event)=>{
-            if(err) {console.log(err); res.send('query err!');}
-            console.log(event);
-            res.render('event', {
-                donor : req.donor,
-                event: event
-            });
-        });
+        // Product.findOne({ eventId: req.params.id }, (err, event)=>{
+        //     if(err) {console.log(err); res.send('query err!');}
+        //     console.log(event);
+        //     res.render('event', {
+        //         donor : req.donor,
+        //         event: event
+        //     });
+        // });
     });
 
     // // update
