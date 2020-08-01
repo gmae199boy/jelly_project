@@ -193,46 +193,5 @@ module.exports = function(contract, account){
         //     });
         // });
     });
-
-    // // update
-    // router.route('/update/:id')
-    //     .get((req, res) => {
-    //         Event.findOne({ id: req.params.itemId }, (err, event) => {
-    //             if(err) {console.log(err); res.send('query fail');}
-    //             res.render('update', { 
-    //                 event: event
-    //             });
-    //         }); 
-    //     })
-    //     .post((req, res) => {
-    //         Item.updateOne(
-    //             { id: req.params.eventId }, 
-    //             { $set: { name: req.body.name, comment: req.body.comment, detail: req.body.detail } }, 
-    //             (err, item) => {
-    //             if(err) return res.json(err);
-    //             console.log("수정 성공")
-    //             res.redirect('/');
-    //         });
-    //     })
-
-    // // delete
-    // router.get('/delete/:id', (req, res) => {
-    //     Event.deleteOne({ evnetId: req.params.eventId }, (err, event) => {
-    //     if(err) {console.log(err); res.send(err);}
-    //     res.redirect('/event');
-    //     });
-    // });
-
-    // //create an apply
-    // router.post('/:id/applies', function(req, res, next){
-    //     var newapply = { body: req.body.apply, author: req.body.user }
-    //     console.log(newapply)
-    //     Item.findOne({ itemId: req.params.id }, function(err, item){
-    //         item.applies.push(newapply);
-    //         item.save();
-    //         console.log("신청 성공");
-    //         res.redirect('/');
-    //     })
-    // });
     return router;
 }

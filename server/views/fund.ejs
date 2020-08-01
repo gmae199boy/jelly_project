@@ -1,23 +1,23 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <%- include('partials/navbar') %>
         <%- include('partials/head') %>
     </head>
 
     <body>
-        <%- include('partials/navbar') %>
         <div class="section">
             <div class="header">
-                <li>fund Name : <%= fund.name %></li>
-                <li>fund Desc : <%= fund.desc %></li>
-                <li>fund Type : <%= fund.type %></li>
-                <li>fund Amount : <%= fund.amount %></li>
-                <li>fund Start Date : <%= fund.startDate %></li>
-                <li>fund Status : <%= fund.status %></li>
+                <li>Fund Name : <%= fund.name %></li>
+                <li>Fund Desc : <%= fund.desc %></li>
+                <li>Fund Type : <%= fund.type %></li>
+                <li>Fund Amount : <%= fund.amount %></li>
+                <li>Fund Start Date : <%= fund.startDate %></li>
+                <li>Fund Status : <%= fund.status %></li>
             </div>
             <div>
                 <!-- <a href="/event/update">수정하기</a> -->
-                <form action="/fund/funding/<%= fund.fundId%>" method="POST">
+                <form action="/fund/funding?fundId=<%= fund.fundId %>" method="POST">
                     <!-- <input type="text" name="email" placeholder="이메일""> -->
                     <input type="text" name="amount" placeholder="기부 금액">
                     <input type="submit">

@@ -36,7 +36,7 @@ web3.eth.getAccounts(function(err, accs){
   app.set('view engine', 'ejs');
 
   // use static file
-  app.use(express.static(path.join(__dirname, 'public')));
+  app.use(express.static(path.join(__dirname, '/views')));
 
   // configure app to use body-parser
   app.use(bodyParser.json());

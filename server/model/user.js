@@ -38,7 +38,7 @@ const userSchema = new mongoose.Schema({
     //     //required: true
     // }, // 기부자 주소
     // 기부자가 지금까지 기부했던 기부 목록 // 수혜자가 받은 펀딩, 금액
-    myfundingList: [{
+    myFundingList: [{
         id: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Fund',

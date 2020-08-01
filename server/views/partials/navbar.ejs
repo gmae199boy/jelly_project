@@ -1,34 +1,95 @@
-<nav class="navbar navbar-default">
-    <div class="container-fluid">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
-                data-target="#bs-example-navbar-collapse-1">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="/">Brand</a>
-        </div>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="description" content="">
+<meta name="author" content="">
+<title>JELLY</title>
+<!-- Font Awesome icons (free version)-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js" crossorigin="anonymous"></script>
 
-        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-            <ul class="nav navbar-nav">
-                <li><a href="/fund">funds</a></li>
-                <li><a href="/fund/create">Create fund</a></li>
-                <li><a href="/signup">Sign Up</a></li>
 
-            </ul>
-            <ul class="nav navbar-nav navbar-right">
-                <% if(user==null){ %>
-                    <li><a href="/login">로그인</a></li>
-                    <li><a href="/signup">회원가입</a></li>
-                <% }else{ %>
-                    <li><a><strong><%= user.name %></strong> 님 안녕하세요!</a></li>
-                    <li><a href="/mypage">마이페이지</a></li>
-                    <li><a href="/logout">로그아웃</a></li>
-                    <li><a href="/credit">젤리 결제하기</a></li>
-                <% } %>
-            </ul>
-        </div><!-- /.navbar-collapse -->
-    </div><!-- /.container-fluid -->
-</nav>
+<link href="css/styles.css" rel="stylesheet">
+
+<link rel="stylesheet" href="css/heading.css">
+<link rel="stylesheet" href="css/body.css">
+<link rel="stylesheet" type="text/css" href="css/login_util.css">
+<link rel="stylesheet" type="text/css" href="css/login_main.css">   
+<nav class="navbar navbar-expand-lg bg-secondary fixed-top" id="mainNav">
+    <div class="container">
+      <a href="/"
+        ><img
+          id="brandImage"
+          src="https://image.flaticon.com/icons/svg/2913/2913894.svg"
+          alt=""
+      /></a>
+      <button
+        class="navbar-toggler navbar-toggler-right font-weight-bold bg-primary text-white rounded"
+        type="button"
+        data-toggle="collapse"
+        data-target="#navbarResponsive"
+        aria-controls="navbarResponsive"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        Menu <i class="fas fa-bars"></i>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarResponsive">
+        <ul class="navbar-nav ml-auto">
+          <% if(user){ %>
+            <li class="nav-item mx-0 mx-lg-1">
+                <a
+                  class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger"
+                  ><strong><%= user.name %></strong> 님 안녕하세요</a
+                >
+              </li>
+
+                <!-- <li>
+                    <a><strong><%= user.name %></strong> HI </a>
+                </li> -->
+                <li class="nav-item mx-0 mx-lg-1">
+                    <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger"
+                     href="/fund"
+                     >FUND</a
+                     >
+                </li>
+                <li class="nav-item mx-0 mx-lg-1">
+                    <a
+                    class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger"
+                    href="/mypage"
+                    >MY PAGE</a
+                    >
+                </li>
+                <li class="nav-item mx-0 mx-lg-1">
+                    <a
+                    class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger"
+                    href="/logout"
+                    >LOGOUT</a
+                    >
+                </li>
+                <li class="nav-item mx-0 mx-lg-1">
+                    <a
+                    class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger"
+                    href="/credit"
+                    >BUY JELLY</a
+                    >
+                </li>
+          <% }else{ %>
+
+            <div class="container"><a href="/"><img id="brandImage" src="https://image.flaticon.com/icons/svg/2913/2913894.svg" alt=""></a>
+                <button class="navbar-toggler navbar-toggler-right font-weight-bold bg-primary text-white rounded" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">Menu <i class="fas fa-bars"></i></button>
+                <div class="collapse navbar-collapse" id="navbarResponsive">
+                    <ul class="navbar-nav ml-auto">
+                        <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="/fund">FUND</a>
+                        </li>
+                        <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="/login">LOGIN</a>
+                        </li>
+                        <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="/signup">SIGN UP</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+          <% } %>
+        </ul>
+      </div>
+    </div>
+  </nav>

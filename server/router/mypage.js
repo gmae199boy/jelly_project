@@ -13,12 +13,11 @@ const RECIPIENT = 1;
 
 module.exports = function(contract, account){
     /* GET home page. */
-    router.get('/', function(req, res, next) {
+    router.get('/', function(req, res) {
         switch(req.user.userType) {
             case DONOR: {
                 queryPromise.getPopulatedUserForMyFundingList(req.user.userId).then((result) => {
                     console.log(result);
-                    console.log(result.myFundingList[0].id);
                     req.user = result;
                     res.render('mypage', {
                         user: req.user,
