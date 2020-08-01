@@ -39,24 +39,23 @@ module.exports = function(contract, account){
           amount: 1000000,
           desc: "맛있다",
         });
-        queryPromise.setProductList(productList1)
+        queryPromise.setProduct(productList1)
         .then((result) =>{
-          return queryPromise.setProductList(productList2);
+          return queryPromise.setProduct(productList2);
         }).catch((err) => {console.log(err)}).then((result) => {
-          return queryPromise.setProductList(productList3);
+          return queryPromise.setProduct(productList3);
         }).catch((err) => {console.log(err)}).then((result) => {
           queryPromise.getProductList().then((result) => {
             console.log(result);
             res.send(result);
-            // res.render('index', { 
-            //   title: 'hello', 
+            // res.render('product', { 
             //   user: req.user,
-            //   productList: result,
+            //   products: result,
             // });
           });
         })
       } else {
-        queryPromise.getProductList().then((result) => {
+        queryPromise.getProduct().then((result) => {
           console.log(result);
           res.send(result);
         })
@@ -64,13 +63,6 @@ module.exports = function(contract, account){
     })
     // console.log(req.user.userId);
   });
-
-  router.get('/:id', function(req, res) {
-    queryPromise.getProductDetail(req.params.Id).then((result) =>{
-      console.log(result);
-      res.send(result);        
-    })
-  })
 
   router.post('/purchase', function(req, res) {
     const quantity = req.body.quantity;
@@ -81,23 +73,18 @@ module.exports = function(contract, account){
       data: req.body.name
     }
     temp.push(name);
+    var blank = { data: " "};
+    temp.push(blank);
     var quan = {
       data: quantity
     }
     temp.push(quan);
-
-    // const inputText = `
-    //   name: ${req.body.name},
-    //   quantity: ${quantity}
-    // `;
 
     QRCode.toDataURL(temp, (err, url) => {
       if(err) console.log(err);
       console.log(url);
       const data = url.replace(/.*,/, "");
       const img = new Buffer(data, "base64");
-
-
 
       User.findOne({userId: 0}).exec((err, result) => {
         if(err){console.log(err); res.send("유저없음");}
@@ -115,7 +102,7 @@ module.exports = function(contract, account){
           });
           res.end(img);
         })
-      })      
+      })
       // req.user.purchaseList.push({
       //   id: req.body._id,
       //   amount: amount,
@@ -133,6 +120,13 @@ module.exports = function(contract, account){
     });
 
     //이더 통신 필요
+  })
+
+  router.get('/:id', function(req, res) {
+    queryPromise.getProduct(req.params.Id).then((result) =>{
+      console.log(result);
+      res.send(result);        
+    })
   })
 
   return router;
