@@ -74,7 +74,7 @@ module.exports = function(contract, account){
       // });
 
       // DB에 회원등록
-      User.register(new User({name: req.body.name, email: req.body.email, userType: req.body.userType}), req.body.password, function(err) {
+      User.register(new User({name: req.body.name, email: req.body.email, userType: req.body.userType, wallet: 10000}), req.body.password, function(err) {
         if (err) {
           console.log('error while user register!', err);
           res.send("회원가입 쿼리 실패");
