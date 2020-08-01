@@ -62,7 +62,7 @@ module.exports = function(contract, account){
                 });
                 req.user.save((err, result) => {
                     if(err) {console.log(err); res.send(err);}
-                    console.log("결제 진행중......")
+                    console.log("결제 진행중......");
                     res.redirect(resultJson.next_redirect_pc_url);
                 })
             });

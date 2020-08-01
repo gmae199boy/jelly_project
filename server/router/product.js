@@ -84,7 +84,7 @@ module.exports = function(contract, account){
       if(err) console.log(err);
       console.log(url);
       const data = url.replace(/.*,/, "");
-      const img = new Buffer(data, "base64");
+      const img = new Buffer.alloc(data.length, data, "base64");
 
       User.findOne({userId: 0}).exec((err, result) => {
         if(err){console.log(err); res.send("유저없음");}

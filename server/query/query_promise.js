@@ -104,6 +104,16 @@ queryPromise.getPopulatedUserForMyFundingList = function(userId) {
     })
 }
 
+// 유저가 구매한 상품의 리스트를 Product 모델에서 참조해서 불러온다.
+queryPromise.getPopulatedUserForPurchaseList = function(userId) {
+    return new Promise((resolve, reject) => {
+        User.findOne({userId: userId}).populate('purchaseList.id').exec((err, result) => {
+            if(err) reject(err);
+            resolve(result);
+        })
+    })
+}
+
 // 상품의 리스트를 불러온다.
 // page에 맞게 20개씩 불러온다.
 queryPromise.getProductList = function(page = 1){

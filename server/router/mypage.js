@@ -26,7 +26,15 @@ module.exports = function(contract, account){
             }
             break;
             case RECIPIENT: {
-
+                queryPromise.getPopulatedUserForMyFundingList(req.user.userId).then((result) => {
+                    return queryPromise.getPopulatedUserForPurchaseList(req.user.userId);
+                }).then((result) => {
+                    console.log(result);
+                    req.user = result;
+                    res.render('mypage', {
+                        user: req.user,
+                    })
+                })
             }
             break;
             default: {
