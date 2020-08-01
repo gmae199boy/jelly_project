@@ -76,10 +76,10 @@ web3.eth.getAccounts(function(err, accs){
 
   // Router
   var indexRouter = require('./router/index')(Jelly, account);
-  var productRouter = require('./router/product')(Jelly, account);
+  var fundRouter = require('./router/fund')(Jelly, account);
   var signupRouter = require('./router/signup')(Jelly, account);
   var loginRouter = require('./router/login')(Jelly, account);
-  var mallRouter = require('./router/mall')(Jelly, account);
+  var productRouter = require('./router/product')(Jelly, account);
   var logoutRouter = require('./router/logout')(Jelly, account);
   var creditRouter = require('./router/credit')(Jelly, account);
   // var itemsRouter = require('./router/items');
@@ -88,11 +88,11 @@ web3.eth.getAccounts(function(err, accs){
   var mypageRouter = require('./router/mypage')(Jelly, account);
   
   app.use('/', indexRouter);
-  app.use('/product', productRouter);
+  app.use('/fund', fundRouter);
   app.use('/signup', signupRouter);
   app.use('/login', loginRouter);
   app.use('/credit', creditRouter);
-  app.use('/mall', mallRouter);
+  app.use('/product', productRouter);
   app.use('/logout', logoutRouter);
   // app.use('/items', itemsRouter);
   // app.use('/new', newRouter);

@@ -11,9 +11,9 @@ passport.deserializeUser(User.deserializeUser());
 module.exports = function(contract, account){
     /* GET home page. */
     router.get('/', function(req, res, next) {
-        queryPromise.getPopulatedProductList(req.user.userId).then((result) => {
+        queryPromise.getPopulatedUserForMyFundingList(req.user.userId).then((result) => {
             console.log(result);
-            console.log(result.myProducts[0].id);
+            console.log(result.myFundingList[0].id);
             req.user = result;
             res.render('mypage', {
                 user: req.user,

@@ -38,11 +38,11 @@ const userSchema = new mongoose.Schema({
     //     //required: true
     // }, // 기부자 주소
     // 기부자가 지금까지 기부했던 기부 목록 // 수혜자가 받은 펀딩, 금액
-    myProducts: [{
+    myfundingList: [{
         id: {
             type: mongoose.Schema.Types.ObjectId,
-            ref: 'Product',
-        }, // Product 컬렉션 참조 ID
+            ref: 'Fund',
+        }, // Fund 컬렉션 참조 ID
         amount: {type: Number, default: 0,} // 기부금
     }],
     // 기부자 결제 정보
@@ -59,7 +59,7 @@ const userSchema = new mongoose.Schema({
     purchaseList: [{
         id: {
             type: mongoose.Schema.Types.ObjectId,
-            ref: "Mall",
+            ref: "Product",
         },
         qrCode: {type: Buffer,},
         quantity: {type: Number},

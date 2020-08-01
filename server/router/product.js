@@ -1,14 +1,12 @@
 var express = require('express');
 var router = express.Router();
+var QRCode = require('qrcode');
 var passport = require('passport');
 
-var query = require('../query/query');
+// 테스트용 save쿼리
 const queryPromise = require('../query/query_promise');
 
-var moment = require('moment');
-require('moment-timezone');
-moment.tz.setDefault("Asia/Seoul");
-
+// session for mongoose passport
 var User = require('../model/user');
 var Product = require('../model/product');
 
@@ -18,210 +16,125 @@ passport.deserializeUser(User.deserializeUser());
 
 
 module.exports = function(contract, account){
-    // index
-    router.get('/', function(req, res) {
-        // promise query
-        queryPromise.getProductList(req.query.page, req.query.status)
-        .then((result) => {
-            res.render('productList', {
-                user: req.user,
-                products: result,
-            });
-        }).catch((err) => {
-            res.send(err);
-        })
-
-        // normal query
-        // query.getProductList(req.query.page, req.query.status, (err, result) => {
-        //     if(err) {console.log(err); res.send("readProductList query err!!");}
-        //     res.render('productList', {
-        //         user: req.user,
-        //         products: result,
-        //     });
-        // });
-    });
-
-    router.route("/create")
-        .get(function(req, res){
-            res.render('createProduct', {
-                user: req.user,
-            });
-        })
-        .post(function(req, res){
-            const date = req.body.startDate;
-            var product = new Product({
-                name: req.body.name,
-                type: req.body.type,
-                amount: req.body.amount,
-                desc: req.body.desc,
-                status: req.body.status,
-                startDate: moment(date).format("YYYY-MM-DD hh:mm")
-            });
-
-            // promise query
-            queryPromise.setProduct(product).then((result) => {
-                res.redirect('/product');
-                //이더리움 통신
-                //console.log('시간 차이: ', moment.duration(moment().diff(result.startDate)).asHours());
-                // contract.deployed().then(function(contractInstance){
-                //     contractInstance.addEvent(
-                //         result.eventId,
-                //         {gas: 1000000, from: account}
-                //     ).then(function(bool){
-                //         if(bool) console.log("add product Successful!!");
-                //         else console.log("add product Fail");
-                //         res.redirect('/product');
-                //     })
-                        // result.name,
-                        // result.type, 
-                        // result.amount, 
-                        // moment(result.startDate).format('YYYY-MM-DD hh:mm'), 
-                        // moment(result.endDate).format('YYYY-MM-DD hh:mm'),
-                        // result.desc, result.status, {gas: 500000, from: accot})
-                        //     .then(function(){
-                        //         res.redirect('/event');
-                        //     })
-                // })
-            }).catch((err) => {
-                console.log(err);
-                res.send(err);
-            });
+  /* GET home page. */
+  router.get('/', function(req, res, next) {
+    //테스트용 코드
+    //product 에 등록된 상품이 없으면 미리 만들어 놓는다.
+    console.log('product page');
+    queryPromise.getProductList().then((result) => {
+      console.log(result);
+      if(result[0] == undefined){
+        var productList1 = new Product({
+          name: "사과",
+          amount: 100,
+          desc: "사과다",
         });
-
-    router.post('/funding', function(req, res){
-        const amount = req.body.amount;
-        const productId = req.query.productId;
-
-        if(amount <= 0) {console.log("기부 금액이 0보다 작거나 같음"); res.send("금액을 0보다 크게 입력해"); return;}
-        if(amount > req.user.wallet) {console.log("지갑에 잔액이 충분하지 않음."); res.send("지갑 금액 부족."); return;}
-        // promise query
-        // findOneAndUpdate 적용판
-        var productResult;
-        var productDetails = {$push: {'productDetails': {'id': req.user._id, 'amount': amount,}}}
-        queryPromise.updateProduct(productId, productDetails).then((result) => {
-            productResult = result;
-            req.user.myProducts.push({id: result._id, amount: amount,});
-            req.user.wallet -= amount;
-            return queryPromise.setUserData(req.user);
-        }).then((result) => {
-            console.log('펀딩 성공!!! 얼마나 펀딩했습니까? = ' + result.myProducts[result.myProducts.length - 1].amount);
-            console.log(req.user);
-            res.render('product', {
-                user: req.user,
-                product: productResult,
-            })
+        var productList2 = new Product({
+          name: "딸기",
+          amount: 300,
+          desc: "맛없다",
         });
-        // save 판
-        // queryPromise.getProduct(productId)
-        // .then((product) => {
-        //     product.productDetails.push({id: req.user._id, amount: amount});
-        //     return queryPromise.setProduct(product);
-        // }).then((result) => {
-        //     req.user.myProducts.push({id: result._id, amount: amount});
-        //     return queryPromise.setUserData(req.user);
-        // }).then((result) => {
-        //     console.log(result);
-        //     res.redirect('/product');
-        // }).catch((err) => {
-        //     console.log(err);
-        //     res.send(err);
-        // })
+        var productList3 = new Product({
+          name: "초칼렛",
+          amount: 1000000,
+          desc: "맛있다",
+        });
+        queryPromise.setProductList(productList1)
+        .then((result) =>{
+          return queryPromise.setProductList(productList2);
+        }).catch((err) => {console.log(err)}).then((result) => {
+          return queryPromise.setProductList(productList3);
+        }).catch((err) => {console.log(err)}).then((result) => {
+          queryPromise.getProductList().then((result) => {
+            console.log(result);
+            res.send(result);
+            // res.render('index', { 
+            //   title: 'hello', 
+            //   user: req.user,
+            //   productList: result,
+            // });
+          });
+        })
+      } else {
+        queryPromise.getProductList().then((result) => {
+          console.log(result);
+          res.send(result);
+        })
+      }
+    })
+    // console.log(req.user.userId);
+  });
 
-        // normal query
-        // query.getProduct(productId, (err, result) => {
-        //     if(err) {console.log(err); res.send('readProduct query err!');}
-        //     res.send(result);
-        // });
+  router.get('/:id', function(req, res) {
+    queryPromise.getProductDetail(req.params.Id).then((result) =>{
+      console.log(result);
+      res.send(result);        
+    })
+  })
+
+  router.post('/purchase', function(req, res) {
+    const quantity = req.body.quantity;
+    const amount = req.body.amount * quantity;
+
+    var temp = [];
+    var name = {
+      data: req.body.name
+    }
+    temp.push(name);
+    var quan = {
+      data: quantity
+    }
+    temp.push(quan);
+
+    // const inputText = `
+    //   name: ${req.body.name},
+    //   quantity: ${quantity}
+    // `;
+
+    QRCode.toDataURL(temp, (err, url) => {
+      if(err) console.log(err);
+      console.log(url);
+      const data = url.replace(/.*,/, "");
+      const img = new Buffer(data, "base64");
+
+
+
+      User.findOne({userId: 0}).exec((err, result) => {
+        if(err){console.log(err); res.send("유저없음");}
+        result.purchaseList.push({
+          id: req.body._id,
+          amount: amount,
+          quantity: quantity,
+          qrCode: img,
+        });
+        queryPromise.setUserData(result).then((result) => {
+          console.log(result);
+          res.writeHead(200, {
+            "Content-Type": "image/png",
+            "Content-Length": img.length
+          });
+          res.end(img);
+        })
+      })      
+      // req.user.purchaseList.push({
+      //   id: req.body._id,
+      //   amount: amount,
+      //   quantity: quantity,
+      //   qrCode: img,
+      // });
+      // queryPromise.setUserData(req.user).then((result) => {
+      //   console.log(result);
+      //   res.writeHead(200, {
+      //     "Content-Type": "image/png",
+      //     "Content-Length": img.length
+      //   });
+      //   res.end(img);
+      // })
     });
 
+    //이더 통신 필요
+  })
 
-    // show
-    router.get('/:id', function(req, res){
-        // promise query
-        queryPromise.getProduct(req.params.id)
-        .then((result) => {
-            res.render('product', {
-                user: req.user,
-                product: result,
-            });
-        })
-        .catch((err) => {
-            res.send(err);
-        })
-        // normal query
-        // query.getProduct(req.query.productId, (err, result) => {
-        //     if (err) {console.log(err); res.send("readProduct query err!!")}
-        //     res.render('product', {
-        //         user: req.user,
-        //         product: result,
-        //     });
-        // });
-        /**
-         * Query for ethereum
-         */
-        // console.log(req.params.id)
-        // contract.deployed().then(function(contractInstance){
-        //     contractInstance.getEvent.call(req.params.id).then(function(event){
-        //         console.log(event)
-        //         res.render('event', {
-        //             event: event,
-        //             donor: req.donor
-        //         })
-        //     });
-        // })
+  return router;
 
-        /**
-         * Query for mongodb
-         */
-        // Product.findOne({ eventId: req.params.id }, (err, event)=>{
-        //     if(err) {console.log(err); res.send('query err!');}
-        //     console.log(event);
-        //     res.render('event', {
-        //         donor : req.donor,
-        //         event: event
-        //     });
-        // });
-    });
-
-    // // update
-    // router.route('/update/:id')
-    //     .get((req, res) => {
-    //         Event.findOne({ id: req.params.itemId }, (err, event) => {
-    //             if(err) {console.log(err); res.send('query fail');}
-    //             res.render('update', { 
-    //                 event: event
-    //             });
-    //         }); 
-    //     })
-    //     .post((req, res) => {
-    //         Item.updateOne(
-    //             { id: req.params.eventId }, 
-    //             { $set: { name: req.body.name, comment: req.body.comment, detail: req.body.detail } }, 
-    //             (err, item) => {
-    //             if(err) return res.json(err);
-    //             console.log("수정 성공")
-    //             res.redirect('/');
-    //         });
-    //     })
-
-    // // delete
-    // router.get('/delete/:id', (req, res) => {
-    //     Event.deleteOne({ evnetId: req.params.eventId }, (err, event) => {
-    //     if(err) {console.log(err); res.send(err);}
-    //     res.redirect('/event');
-    //     });
-    // });
-
-    // //create an apply
-    // router.post('/:id/applies', function(req, res, next){
-    //     var newapply = { body: req.body.apply, author: req.body.user }
-    //     console.log(newapply)
-    //     Item.findOne({ itemId: req.params.id }, function(err, item){
-    //         item.applies.push(newapply);
-    //         item.save();
-    //         console.log("신청 성공");
-    //         res.redirect('/');
-    //     })
-    // });
-    return router;
 }

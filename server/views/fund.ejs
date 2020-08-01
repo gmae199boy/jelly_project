@@ -8,16 +8,16 @@
         <%- include('partials/navbar') %>
         <div class="section">
             <div class="header">
-                <li>Product Name : <%= product.name %></li>
-                <li>Product Desc : <%= product.desc %></li>
-                <li>Product Type : <%= product.type %></li>
-                <li>Product Amount : <%= product.amount %></li>
-                <li>Product Start Date : <%= product.startDate %></li>
-                <li>Product Status : <%= product.status %></li>
+                <li>fund Name : <%= fund.name %></li>
+                <li>fund Desc : <%= fund.desc %></li>
+                <li>fund Type : <%= fund.type %></li>
+                <li>fund Amount : <%= fund.amount %></li>
+                <li>fund Start Date : <%= fund.startDate %></li>
+                <li>fund Status : <%= fund.status %></li>
             </div>
             <div>
                 <!-- <a href="/event/update">수정하기</a> -->
-                <form action="/product/funding?productId=<%= product.productId%>" method="POST">
+                <form action="/fund/funding/<%= fund.fundId%>" method="POST">
                     <!-- <input type="text" name="email" placeholder="이메일""> -->
                     <input type="text" name="amount" placeholder="기부 금액">
                     <input type="submit">

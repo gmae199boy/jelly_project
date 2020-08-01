@@ -19,11 +19,11 @@
                 <li role="presentation" id="my-item-btn" class="active"><a href="#">내가 기부한 펀딩 목록</a></li>
             </ul>
             <div id="my-item">
-                <% if (user.myProducts !== null){user.myProducts.forEach((product)=>{ %>
+                <% if (user.myFundingList !== null){user.myFundingList.forEach((fund)=>{ %>
                     <div class="list-group" style="margin-bottom: 0px !important;">
-                        <a href="/product?<%= product.productId %>" class="list-group-item">
-                            <h4 class="list-group-item-heading"><%= product.id.name %> </h4>
-                            <p class="list-group-item-text"><%= product.amount %></p>
+                        <a href="/fund?<%= fund.fundId %>" class="list-group-item">
+                            <h4 class="list-group-item-heading"><%= fund.id.name %> </h4>
+                            <p class="list-group-item-text"><%= fund.amount %></p>
                         </a>
                     </div>
                 <%  })} %>

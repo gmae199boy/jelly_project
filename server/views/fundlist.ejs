@@ -17,13 +17,13 @@
             </div>
 
             <div class="row">
-                <% if (products !== null){products.forEach((product)=>{ %>
+                <% if (funds !== null){funds.forEach((fund)=>{ %>
                 <div class="col-lg-4">
-                    <a href="/product?productId=<%= product.productId %>">
+                    <a href="/fund/<%= fund.fundId %>">
                         <div class="card">
                             <div class="card-image"></div>
-                            <div class="card-title"><%= product.name %></div>
-                            <div class="card-comment"><%= product.desc %> </div>
+                            <div class="card-title"><%= fund.name %></div>
+                            <div class="card-comment"><%= fund.desc %> </div>
                         </div>
                     </a>
                 </div>

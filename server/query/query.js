@@ -1,16 +1,16 @@
 var User = require("../model/user");
-var Product = require("../model/product");
+var Fund = require("../model/fund");
 
 var query = {};
 
 //한 페이지에 20개의 펀딩까지 보여준다.
-//readProductList
+//readFundList
 const perPage = 20;
 
-// 유저가 참여한 product의 목록을 배열로 리턴한다.
-query.getUserProducts = function(userId, callback) {
-    User.find({userId: userId}, {myProducts: 1})
-    .populate('myProducts')
+// 유저가 참여한 fund의 목록을 배열로 리턴한다.
+query.getUserFunding = function(userId, callback) {
+    User.find({userId: userId}, {myFundginList: 1})
+    .populate('myFundginList')
     .exec((err, result) => {
         if (err) {callback(err, null); return;}
         callback(null, result);
@@ -18,12 +18,12 @@ query.getUserProducts = function(userId, callback) {
     });
 }
 
-// 현재 진행중인 productList를 배열로 반환한다.
-query.getProductList = function(page = 0, status = 2, callback) {
+// 현재 진행중인 fundList를 배열로 반환한다.
+query.getFundList = function(page = 0, status = 2, callback) {
     //status = 1 : 펀딩 진행 전, status = 2 : 펀딩 진행 중, status = 4 : 펀딩 종료
-    Product.find({status: status}, { 
+    Fund.find({status: status}, { 
         _id: 0, 
-        productId: 1, 
+        fundId: 1, 
         name: 1, 
         type: 1, 
         amount: 1, 
@@ -47,8 +47,8 @@ query.getProductList = function(page = 0, status = 2, callback) {
     });
 }
 
-query.getProduct = function(productId, callback) {
-    Product.findOne({productId: productId}).exec((err, result) => {
+query.getFund = function(fundId, callback) {
+    Fund.findOne({fundId: fundId}).exec((err, result) => {
         if (err) {callback(err, null); return;}
         callback(null, result);
         return;

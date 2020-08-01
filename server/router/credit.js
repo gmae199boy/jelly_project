@@ -114,8 +114,8 @@ module.exports = function(contract, account){
             //         100000,
             //         {gas: 1000000, from: account}
             //     ).then(function(bool){
-            //         if(bool) console.log("add product Successful!!");
-            //         else console.log("add product Fail");
+            //         if(bool) console.log("add fund Successful!!");
+            //         else console.log("add fund Fail");
             //         req.user.creditRecord[req.user.creditRecord.length-1].pgToken = pg_token;
             //         //나중에 이더롸 통신할때 로직변경 필수.
             //         req.user.wallet += parseInt(resultJson.amount.total);
@@ -128,7 +128,7 @@ module.exports = function(contract, account){
             //                 user: req.user,
             //             })
             //         });
-            //         // res.redirect('/product');
+            //         // res.redirect('/fund');
             //     })
             // });
 
