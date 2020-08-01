@@ -1,5 +1,4 @@
 pragma solidity ^0.5.8;
-//I'm not sure about the version
 
 contract Jelly {
     string name;
@@ -7,16 +6,45 @@ contract Jelly {
     uint8 decimals;
     uint totalSupply;
     mapping(address => uint) balances;
+    address owner;
+    address beneficiary;
 
-    constructor(string memory _name, string memory _symbol, uint8 _decimals, uint _totalSupply) public {
-        name = _name;
-        symbol = _symbol;
-        decimals = _decimals;
-        totalSupply = _totalSupply;
-        balances[msg.sender] = _totalSupply;
-        emit Transfer(address(0), msg.sender, _totalSupply);
+    struct Doner{
+        address addr;
+        uint amount;
     }
 
+    struct Fund {
+        uint donatedAmount;  //모금금액
+        uint fundingGoal;
+        uint numDoners;
+        uint recieveAmount;  //각 Recipient가 받는 금액
+        address[] Recipients;
+        mapping (uint => Doner) doners;
+    }
+
+    struct Product{
+        uint price;
+        uint quantity;
+    }
+
+    uint numFunds;
+    mapping (uint => Fund) funds;
+    uint numProducts;
+    mapping (uint => Product) products;
+
+    constructor() public {
+        name = "JELLY";
+        symbol = "JLY";
+        decimals = 2;
+        totalSupply = 1000000;
+        owner = msg.sender;
+        balances[msg.sender] = totalSupply;
+        emit Transfer(address(0), msg.sender, totalSupply);
+    }
+
+
+    //view
     function balanceOf(address _owner) public view returns (uint balance){
         return balances[_owner];
     }
@@ -31,66 +59,40 @@ contract Jelly {
     }
 
     event Transfer(address _from, address _to, uint _value);
+
+    function newFund(uint _fundingGoal, uint _recieveAmount, address[] memory _recipients) public returns (uint fundId){
+        fundId = numFunds++;
+        funds[fundId] = Fund(0, _fundingGoal, 0, _recieveAmount, _recipients);
+    }
+    function donate(uint _fundId, uint _sendAmount) public returns (bool success) {
+        Fund storage c = funds[_fundId];
+        require(c.doantedAmount < c.fundingGoal, "fundingGoal completed");
+        c.doners[c.numDoners++] = Doner({addr: msg.sender, amount: _sendAmount});
+        c.doantedAmount += _sendAmount;
+        transfer(msg.sender, beneficiary, _sendAmount);
+        emit Transfer(msg.sender, beneficiary, _sendAmount);
+        return true;
+    }
+    function recieve(uint _fundId) public returns (bool success) {
+        Fund storage c = funds[_fundId];
+        require(c.doantedAmount == c.fundingGoal, "fundingGoal should be accomplished");
+        require(c.doantedAmount <= balances[beneficiary], "um...we don't have enough jelly to give T.T");
+        for (uint i = 0; i < c.Recipients.length; i++ ){
+            balances[c.Recipients[i]] += c.recieveAmount;
+        }
+        balances[beneficiary] -= c.doantedAmount;
+        return true;
+    }
+    function newProduct(uint _price, uint _quantity) public returns (uint productId){
+        productId = numProducts++;
+        products[productId] = Product(_price, _quantity);
+    }
+    function buyProduct(uint _productId, uint _quantity) public returns (bool success){
+        Product storage c = products[_productId];
+        require(c.quantity > 0, "soldout");
+        c.quantity -= _quantity;
+        transfer(msg.sender, owner, c.price * _quantity);
+        emit Transfer(msg.sender, owner, c.price*_quantity);
+        return true;
+    }
 }
-
-
-
-
-// pragma solidity ^0.5.16;
-// //pragma experimental ABIEncoderV2;
-
-// /*
-
-
-//     *************************************************************
-//     All source code created by gmae199boy;
-//     *************************************************************
-
-
-//  */
-// contract Jelly {
-//     struct Event {
-//         mapping (address => DonateTransaction) DonateProgress;
-//     }
-//     struct DonateTransaction {
-//         //string email;
-//         uint256 Amount;
-//     }
-
-//     Event[] events;
-//     address owner;
-//     uint256 token;
-
-//     constructor() public {
-//         owner = msg.sender;
-//         token = 10000;
-//     }
-
-//     function addEvent(uint256 _eventNum) public returns (bool) {
-//         if(events.length != _eventNum - 1) return false;
-//         events[_eventNum] = Event();
-//         return true;
-//     }
-
-//     function addDonateTransaction(
-//         //string memory _email,
-//         uint256 _amount,
-//         uint256 _eventNum
-//         ) public returns (bool) {
-//             // 나중에 웹과 이더에서 이벤트 길이가 다를때 로직 변경
-//             if(events.length != _eventNum) return false;
-//             events[_eventNum].DonateProgress[msg.sender] =
-//                 DonateTransaction(_amount);
-//                 return true;
-//     }
-
-//     // function getTotalDonateAmount(uint256 _eventNum) public view returns (uint256){
-//     //     uint256 i = 0;
-//     //     uint256 totalAmount = 0;
-//     //     while(events[_eventNum].DonateProgress[i].Amount != 0) {
-//     //         totalAmount += events[_eventNum].DonateProgress[i].Amount;
-//     //         ++i;
-//     //     }
-//     //     return totalAmount;
-//     // }
-// }
