@@ -20,7 +20,10 @@ queryPromise.getUserFundingList = function(userId) {
 }
 
 // 현재 진행중인 fundingList를 배열로 반환한다.
-queryPromise.getFundList = function(page = 0, status = 2) {
+// page와 status에 맞게 리스트를 반환한다.
+// page = 2, status = 2 이면 
+// status 가 2인(펀딩 중) 20~40 인덱스의 펀딩 리스트를 반환.
+queryPromise.getFundList = function(page = 1, status = 2) {
     return new Promise((resolve, reject) => {
         //status = 1 : 펀딩 진행 전, status = 2 : 펀딩 진행 중, status = 4 : 펀딩 종료
         Fund.find({status: status}, { 
@@ -34,7 +37,7 @@ queryPromise.getFundList = function(page = 0, status = 2) {
             desc: 1, 
             status: 1 })
         .sort({ $natural: 1 })
-        .skip(page * perPage)
+        .skip((page - 1) * perPage)
         .limit(perPage)
         .lean()
         .exec((err, result) => {
@@ -44,6 +47,7 @@ queryPromise.getFundList = function(page = 0, status = 2) {
     });
 }
 
+// 펀드 상품을 한개 불러온다
 queryPromise.getFund = function(fundId) {
     return new Promise((resolve, reject) => {
         Fund.findOne({fundId: fundId}).exec((err, result) => {
@@ -53,6 +57,7 @@ queryPromise.getFund = function(fundId) {
     });
 }
 
+// 펀드 상품을 저장한다.
 queryPromise.setFund = function(fund) {
     return new Promise((resolve, reject) => {
         fund.save((err, result) => {
@@ -62,6 +67,7 @@ queryPromise.setFund = function(fund) {
     })
 }
 
+// 펀드 상품 한개를 업데이트 한다.
 queryPromise.updateFund = function(fundId, update) {
     return new Promise((resolve, reject) => {
         Fund.findOneAndUpdate(
@@ -76,6 +82,7 @@ queryPromise.updateFund = function(fundId, update) {
     })
 }
 
+// 유저 정보를 저장한다.
 queryPromise.setUserData = function(user) {
     return new Promise((resolve, reject) => {
         user.save((err, result) => {
@@ -85,6 +92,7 @@ queryPromise.setUserData = function(user) {
     });
 }
 
+// 유저가 들고있는 myFundingList를 Fund 모델에서 참조해서 불러온다.
 queryPromise.getPopulatedUserForMyFundingList = function(userId) {
     return new Promise((resolve, reject) => {
         User.findOne({userId: userId}).populate('myFundingList.id', 
@@ -96,12 +104,13 @@ queryPromise.getPopulatedUserForMyFundingList = function(userId) {
     })
 }
 
-queryPromise.getProductList = function(page = 0){
+// 상품의 리스트를 불러온다.
+// page에 맞게 20개씩 불러온다.
+queryPromise.getProductList = function(page = 1){
     return new Promise((resolve, reject) => {
-        //status = 1 : 펀딩 진행 전, status = 2 : 펀딩 진행 중, status = 4 : 펀딩 종료
         Product.find({})
         .sort({ $natural: 1 })
-        .skip(page * perPage)
+        .skip((page - 1) * perPage)
         .limit(perPage)
         .lean()
         .exec((err, result) => {
@@ -111,7 +120,8 @@ queryPromise.getProductList = function(page = 0){
     });
 }
 
-queryPromise.getProductDetail = function(productId) {
+// 상품 한개를 불러온다
+queryPromise.getProduct = function(productId) {
     return new Promise((resolve, reject) => {
         Product.findOne({productId: productId}).exec((err, result) => {
             if(err) reject(err);
@@ -120,7 +130,8 @@ queryPromise.getProductDetail = function(productId) {
     })
 }
 
-queryPromise.setProductList = function(product) {
+// 상품을 저장한다.
+queryPromise.setProduct = function(product) {
     return new Promise((resolve, reject) => {
         product.save((err, result) => {
             if(err) reject(err);
