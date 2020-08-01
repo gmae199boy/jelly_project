@@ -75,17 +75,29 @@ module.exports = function(contract, account){
     const quantity = req.body.quantity;
     const amount = req.body.amount * quantity;
 
-    const inputText = `
-      name: ${req.body.name},
-      quantity: ${quantity}
-    `;
+    var temp = [];
+    var name = {
+      data: req.body.name
+    }
+    temp.push(name);
+    var quan = {
+      data: quantity
+    }
+    temp.push(quan);
 
-    console.log(inputText);
+    // const inputText = `
+    //   name: ${req.body.name},
+    //   quantity: ${quantity}
+    // `;
 
-    QRCode.toDataURL(inputText, (err, url) => {
+    QRCode.toDataURL(temp, (err, url) => {
       if(err) console.log(err);
+      console.log(url);
       const data = url.replace(/.*,/, "");
       const img = new Buffer(data, "base64");
+
+
+
       User.findOne({userId: 0}).exec((err, result) => {
         if(err){console.log(err); res.send("유저없음");}
         result.purchaseList.push({
