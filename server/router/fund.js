@@ -94,23 +94,34 @@ module.exports = function(contract, account){
 
         if(amount <= 0) {console.log("기부 금액이 0보다 작거나 같음"); res.send("금액을 0보다 크게 입력해"); return;}
         if(amount > req.user.wallet) {console.log("지갑에 잔액이 충분하지 않음."); res.send("지갑 금액 부족."); return;}
+        queryPromise.getFund(fundId).then((result) => {
+            var totalAmount = result.amount + amount;
+            if(totalAmount > result.amount) {
+                console.log("목표 금액을 초과하였다.");
+                res.send("목표 금액을 초과했으니 목표 금액까지만 기부해라");
+                return;
+            } else {
+                var fundResult;
+                var fundingDetails = {$push: {'fundingDetails': {'id': req.user._id, 'amount': amount,}}}
+                queryPromise.updateFund(fundId, fundingDetails).then((result) => {
+                    fundResult = result;
+                    req.user.myFundingList.push({id: result._id, amount: amount,});
+                    req.user.wallet -= amount;
+                    return queryPromise.setUserData(req.user);
+                }).then((result) => {
+                    console.log('펀딩 성공!!! 얼마나 펀딩했습니까? = ' + result.myFundingList[result.myFundingList.length - 1].amount);
+                    console.log(req.user);
+                    res.render('fund', {
+                        user: req.user,
+                        fund: fundResult,
+                    });
+                });
+            }
+
+        })
         // promise query
         // findOneAndUpdate 적용판
-        var fundResult;
-        var fundingDetails = {$push: {'fundingDetails': {'id': req.user._id, 'amount': amount,}}}
-        queryPromise.updateFund(fundId, fundingDetails).then((result) => {
-            fundResult = result;
-            req.user.myFundingList.push({id: result._id, amount: amount,});
-            req.user.wallet -= amount;
-            return queryPromise.setUserData(req.user);
-        }).then((result) => {
-            console.log('펀딩 성공!!! 얼마나 펀딩했습니까? = ' + result.myFundingList[result.myFundingList.length - 1].amount);
-            console.log(req.user);
-            res.render('fund', {
-                user: req.user,
-                fund: fundResult,
-            })
-        });
+
         // save 판
         // queryPromise.getProduct(productId)
         // .then((product) => {
