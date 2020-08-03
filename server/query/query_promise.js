@@ -1,6 +1,7 @@
 var User = require("../model/user");
 var Fund = require("../model/fund");
 var Product = require('../model/product');
+const { query } = require("express");
 var queryPromise = {};
 
 //한 페이지에 20개의 펀딩까지 보여준다.
@@ -55,6 +56,17 @@ queryPromise.getFund = function(fundId) {
             resolve(result);
         });
     });
+}
+
+queryPromise.getPopulatedFundForRecipient = function(fundId) {
+    return new Promise((resolve, reject) => {
+        Fund.findOne({fundId: fundId})
+            .populate('receiveRecipients')
+            .exec((err, result) => {
+            if(err) reject(err);
+            resolve(result);
+        })
+    })
 }
 
 // 펀드 상품을 저장한다.
@@ -146,6 +158,24 @@ queryPromise.setProduct = function(product) {
         product.save((err, result) => {
             if(err) reject(err);
             resolve(result);
+        })
+    })
+}
+
+queryPromise.receivejelly = function(fundId, amount) {
+    return new Promise((resolve, reject) => {
+        var i = 0;
+        queryPromise.getPopulatedFundForRecipient(fundId).then((result) => {
+            for(i; i < result.receiveRecipients.length; ++i) {
+                User.findOneAndUpdate({
+                    userId: result.receiveRecipients.userId
+                }, {
+                    wallet: result.wallet += amount
+                }).exec((err, result) => {
+                    if(err) {reject(err);return;}
+                });
+            }
+            if(i == result.receiveRecipients.length) resolve(true);
         })
     })
 }

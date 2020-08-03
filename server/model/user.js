@@ -66,8 +66,11 @@ const userSchema = new mongoose.Schema({
         amount: {type: Number},
     }],
     // 기부자 결제 젤리 총량
-    wallet: {type: Number, default: 0}, 
-    
+    wallet: {type: Number, default: 0},
+    address: {
+        type: Number,
+        //required: true,
+    },
 });
 // 플러그인 설정
 userSchema.plugin(passportLocalMongoose, { usernameField: 'email' });

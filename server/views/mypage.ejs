@@ -7,7 +7,7 @@
     <body>
         <%- include('partials/navbar') %>
         <div style = "padding: 50px 10px;"></div>
-        <div class="section">
+            <div class="section" style="margin-top: 25px; margin-left: 50px; margin-right: 200px;">
             <div class="header">
                 <h1> My page </h1> <br>
             </div>
@@ -15,14 +15,14 @@
             <div class="profile-section">
                 
                     <% if (user.userType == 0) { %>
-                        <div class="profile-info" display="inline-block"><p style="font-size: 30px; color:white;"> 기부자 이름: <%= user.email %></p></div>
+                        <div class="profile-info" display="inline-block"><p style="font-size: 30px; color:white;"> 기부자: <%= user.name %></p></div>
                     <% } else { %>
-                        <div class="profile-info" display="inline-block"><p style="font-size: 30px; color:white;"> 수혜자 이름: <%= user.email %></p></div>
+                        <div class="profile-info" display="inline-block"><p style="font-size: 30px; color:white;"> 수혜자: <%= user.name %></p></div>
                     <% } %>
                     <br>    
             </div>
 
-            <table class="table">
+            <table class="table table-hover">
                 <thead>
                   <tr>
                     <th scope="col"> </th>
@@ -31,6 +31,7 @@
                     <th scope="col">프로젝트 펀딩 현황</th>
                   </tr>
                 </thead>
+       
                 <tbody>
                   <tr>
                     <th scope="row">1</th>
@@ -52,10 +53,12 @@
                   </tr>
                 </tbody>
               </table>
-
+            
+            <br>
+            <br>
 
             <ul class="nav nav-tabs">
-                <li role="presentation" id="my-item-btn" class="active">내가 기부한 JELLY 목록</li>
+                <li role="presentation" id="my-item-btn" class="active"><p style="font-size: 30px; color:white;"> 내가 기부한 JELLY 목록</p></li>
                 <!-- <li role="presentation" id="join-item-btn"><a href="#">현재 진행중인 펀딩</a></li> -->
                 <!-- <li role="presentation"><a href="#">완료한 프로젝트</a></li> -->
             </ul>
@@ -65,8 +68,8 @@
                 <% if (user.myFundingList !== null){user.myFundingList.forEach((fund)=>{ %>
                     <div class="list-group" style="margin-bottom: 0px !important;">
                         <a href="/fund/<%= fund.fundId %>" class="list-group-item">
-                            <h4 class="list-group-item-heading"><%= fund.id.name %> </h4>
-                            <p class="list-group-item-text"><%= fund.amount %></p>
+                            <h4 class="list-group-item-heading">기부자 : <%= fund.id.name %> </h4>
+                            <p class="list-group-item-text">기부한 JELLY 수 : <%= fund.amount %></p>
                         </a>
                     </div>
                 <%  })} %>
@@ -87,6 +90,7 @@
                 <%  //})} %>
             </div> -->
         </div>
+        
     </body>
 </html>
 

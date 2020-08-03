@@ -9,6 +9,11 @@ const fundSchema = new mongoose.Schema({
     startDate: 'Moment',     // 이벤트 시작 시간
     endDate: Date,           // 이벤트 종료 시간
     desc: String,            // 이벤트 설명
+    currentAmount: {type: Number, default: 0},
+    // 받아야할 수혜자 리스트
+    receiveRecipients: [{
+        type: mongoose.Schema.Types.ObjectId, ref: 'User',
+    }],
     status: {
         type: Number, // 1: 진행 전, 2: 진행 중, 4: 진행 종료
         // required: true

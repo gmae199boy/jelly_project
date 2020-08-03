@@ -19,7 +19,7 @@
             <div class="row">
                 <% if (funds !== null){funds.forEach((fund)=>{ %>
                 <div class="col-lg-4">
-                    <a href="/fund?fundId=<%= fund.fundId %>">
+                    <a href="/fund/<%= fund.fundId %>">
                         <div class="card">
                             <div class="card-image"></div>
                             <div class="card-title"><%= fund.name %></div>
