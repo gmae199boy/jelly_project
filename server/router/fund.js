@@ -117,7 +117,11 @@ module.exports = function(contract, account){
                             {gas: 1000000, from: account},
                         ).then((bool) => {
                             if(bool) console.log("funding Successful!!");
-                            else console.log("funding Fail");
+                            else {
+                                console.log("funding Fail");
+                                res.send("funding transaction fail");
+                                return;
+                            }
 
                             // 모금이 완료되면 정산을 시작
                             if(fundResult.amount == fundResult.currentAmount) {
@@ -149,7 +153,6 @@ module.exports = function(contract, account){
             }
         })
     });
-
 
     // show
     router.get('/:id', function(req, res){
