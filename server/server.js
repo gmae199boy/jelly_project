@@ -4,11 +4,11 @@ const app = express();
 var https = require('https');
 var bodyParser = require('body-parser');
 const fs = require('fs');
-// const options = {
-//   key: fs.readFileSync('/etc/letsencrypt/live/blog.nopublisher.dev/privkey.pem'),
-//   cert: fs.readFileSync('/etc/letsencrypt/live/blog.nopublisher.dev/fullchain.pem'),
-//   ca: fs.readFileSync('/etc/letsencrypt/live/blog.nopublisher.dev/chain.pem')
-// };
+const options = {
+  key: fs.readFileSync('/etc/letsencrypt/live/blog.nopublisher.dev/privkey.pem'),
+  cert: fs.readFileSync('/etc/letsencrypt/live/blog.nopublisher.dev/fullchain.pem'),
+  ca: fs.readFileSync('/etc/letsencrypt/live/blog.nopublisher.dev/chain.pem')
+};
 
 
 const path = require('path');
@@ -29,7 +29,7 @@ web3.eth.getAccounts(function(err, accs){
 
   // Constants
   const PORT = 8080;
-  const HOST = '127.0.0.1';
+  const HOST = '0.0.0.0';
 
   // view engine setup
   app.set('views', path.join(__dirname, 'views'));
@@ -101,12 +101,12 @@ web3.eth.getAccounts(function(err, accs){
 
 
   // server start
-  app.listen(PORT, HOST);
-  console.log(`Running on http://${HOST}:${PORT}`);
+  // app.listen(PORT, HOST);
+  // console.log(`Running on http://${HOST}:${PORT}`);
 
-  // https.createServer(options, app).listen(PORT, function(){
-  //   console.log('8080 connected!'); 
-  // });
+  https.createServer(options, app).listen(PORT, function(){
+    console.log('8080 connected!'); 
+  });
 
   // server.listen(PORT, function(){
   //   console.log("서버 연결");
