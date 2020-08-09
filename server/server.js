@@ -4,14 +4,12 @@ const app = express();
 var https = require('https');
 var bodyParser = require('body-parser');
 const fs = require('fs');
+const path = require('path');
 const options = {
   key: fs.readFileSync('/etc/letsencrypt/live/blog.nopublisher.dev/privkey.pem'),
   cert: fs.readFileSync('/etc/letsencrypt/live/blog.nopublisher.dev/fullchain.pem'),
   ca: fs.readFileSync('/etc/letsencrypt/live/blog.nopublisher.dev/chain.pem')
 };
-
-
-const path = require('path');
 
 //truffle setting
 var contract = require('truffle-contract');
@@ -19,7 +17,7 @@ var jelly_artifacts = require('../build/contracts/Jelly.json');
 var Jelly = contract(jelly_artifacts);
 var account;
 var Web3 = require('web3');
-var web3 = new Web3('http://localhost:8545');
+var web3 = new Web3('http://0.0.0.0:8545');
 web3.eth.getAccounts(function(err, accs){
   if(err) {console.log(err);return;}
   if(accs.length ===0) {console.log("어카운트 없음"); return;}
@@ -53,16 +51,16 @@ web3.eth.getAccounts(function(err, accs){
   autoIncrement.initialize(db);
 
   db.on('error', function(){
-      console.log('MongoDB connection failed!')
+      console.log('MongoDB connection failed!');
   })
   db.once('open', function(){
-      console.log('MongoDB connection success!')
+      console.log('MongoDB connection success!');
   })
 
 
   // Passport
   var passport = require('passport');
-  var session = require('express-session')
+  var session = require('express-session');
   // flash는 session이 필요하므로 반드시 session 아래에 정의해야 함
   var flash = require('connect-flash');
   app.use(session({
