@@ -119,7 +119,7 @@ contract Jelly {
     }
 
     // 펀딩 목표금액에 달성하면 수혜자들에게 돈을 나눠주는 로직을 실행하기 위한 함수 추가
-    function recieve(uint _fundId) public returns (bool) {
+    function receive(uint _fundId) public returns (bool) {
         Fund memory f = funds[_fundId];
         require(f.donatedAmount == f.fundingGoal, "fundingGoal should be accomplished");
         require(f.donatedAmount <= balances[beneficiary], "um...we don't have enough jelly to give T.T");
