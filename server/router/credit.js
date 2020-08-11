@@ -92,17 +92,28 @@ module.exports = function(contract, account){
             var resultJson = JSON.parse(body);
             console.log(resultJson);
             req.user.creditRecord[req.user.creditRecord.length-1].pgToken = pg_token;
-            //나중에 이더와 통신할때 로직변경 필수.
-            req.user.wallet += parseInt(resultJson.amount.total);
+            
+            contract.deployed().then(function(contractInstance){
+                contractInstance.transfer(
+                    account, // address
+                    account, // 펀딩 금액
+                    parseInt(resultJson.amount.total),
+                    {gas: 1000000, from: account},
+                ).then((bool) => {
+                    if(bool) console.log('이더에 저장 성공');
+                    else console.log('이더에 저장 실패');
+                    req.user.wallet += parseInt(resultJson.amount.total);
 
-            req.user.save((err, result) => {
-                if(err) {console.log(err); res.send(err);}
-                //여기서 web3와 통신해서 사용자에게 토큰을 줘야한다.
-                res.render('credit_complete', {
-                    amount: resultJson.amount.total,
-                    user: req.user,
-                })
-            });
+                    req.user.save((err, result) => {
+                        if(err) {console.log(err); res.send(err);}
+                        //여기서 web3와 통신해서 사용자에게 토큰을 줘야한다.
+                        res.render('credit_complete', {
+                            amount: resultJson.amount.total,
+                            user: req.user,
+                        })
+                    });
+
+            })});
 
             // 체인 코드 개선중.....
             //이더 통신

@@ -55,7 +55,6 @@ module.exports = function(contract, account){
             const date = req.body.startDate;
             var fund = new Fund({
                 name: req.body.name,
-                type: req.body.type,
                 amount: req.body.amount,
                 desc: req.body.desc,
                 status: req.body.status,
@@ -85,15 +84,20 @@ module.exports = function(contract, account){
             });
         });
 
+    //숫자를 받을때는 무조건 parseIntm Number 해야 숫자로 들어온다
     router.post('/funding/:id', function(req, res){
-        const amount = req.body.amount;
-        const fundId = req.params.id;
+        const amount = parseInt(req.body.amount);
+        const fundId = parseInt(req.params.id);
         var fundResult;
 
+        // 기부할 때 0원 이하로는 기부를 못하게함
+        // 지갑에 기부할 만큼의 잔액이 없으면 못하게 함
         if(amount <= 0) {console.log("기부 금액이 0보다 작거나 같음"); res.send("금액을 0보다 크게 입력해"); return;}
         if(amount > req.user.wallet) {console.log("지갑에 잔액이 충분하지 않음."); res.send("지갑 금액 부족."); return;}
         queryPromise.getFund(fundId).then((result) => {
             var totalAmount = result.currentAmount + amount;
+
+            // 현재 모금 금액보다 크면 기부를 못하게함
             if(totalAmount > result.amount) {
                 console.log("목표 금액을 초과하였다.");
                 res.send("목표 금액을 초과했으니 목표 금액까지만 기부해라");
@@ -112,8 +116,8 @@ module.exports = function(contract, account){
                     console.log('펀딩 성공!!! 얼마나 펀딩했습니까? = ' + result.myFundingList[result.myFundingList.length - 1].amount);
                     contract.deployed().then(function(contractInstance){
                         contractInstance.funding(
-                            result.fundId, // 펀드 id
-                            amount,        // 펀딩 금액
+                            fundId, // 펀드 id
+                            amount, // 펀딩 금액
                             {gas: 1000000, from: account},
                         ).then((bool) => {
                             if(bool) console.log("funding Successful!!");
@@ -143,7 +147,7 @@ module.exports = function(contract, account){
                                 })
                                 return;
                             }
-                            res.redirect('/fund/' + result.fundId);
+                            res.redirect('/fund/' + fundId);
                         })
                     });
                 }).catch((err) => {

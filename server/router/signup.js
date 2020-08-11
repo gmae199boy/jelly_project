@@ -62,9 +62,6 @@ module.exports = function(contract, account){
 
   // 회원가입 로직
   router.post('/',  function(req, res, next) {
-      console.log(req.body.email);
-      console.log(req.body.name);
-      console.log(req.body.password);
 
       // var userInfo = new User({
       //   name: req.body.name,
@@ -78,7 +75,7 @@ module.exports = function(contract, account){
         name: req.body.name,
         email: req.body.email,
         userType: req.body.userType,
-        wallet: 10000,                         // 테스트용 코드
+        // wallet: 10000,  // 테스트용 코드
       }), req.body.password, function(err) {
         if (err) {
           console.log('error while user register!', err);
