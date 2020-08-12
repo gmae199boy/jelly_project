@@ -30,7 +30,7 @@ web3.eth.getAccounts(function(err, accs){
   const HOST = '0.0.0.0';
 
   // view engine setup
-  app.set('views', path.join(__dirname, 'views'));
+  // app.set('views', path.join(__dirname, 'views'));
   app.set('view engine', 'ejs');
 
   // use static file
@@ -80,9 +80,6 @@ web3.eth.getAccounts(function(err, accs){
   var productRouter = require('./router/product')(Jelly, account);
   var logoutRouter = require('./router/logout')(Jelly, account);
   var creditRouter = require('./router/credit')(Jelly, account);
-  // var itemsRouter = require('./router/items');
-  // var newRouter = require('./router/new');
-  // var rateRouter = require('./router/rate');
   var mypageRouter = require('./router/mypage')(Jelly, account);
   
   app.use('/', indexRouter);
@@ -92,9 +89,6 @@ web3.eth.getAccounts(function(err, accs){
   app.use('/credit', creditRouter);
   app.use('/product', productRouter);
   app.use('/logout', logoutRouter);
-  // app.use('/items', itemsRouter);
-  // app.use('/new', newRouter);
-  // app.use('/rate', rateRouter);
   app.use('/mypage', mypageRouter);
 
 
@@ -105,10 +99,4 @@ web3.eth.getAccounts(function(err, accs){
   https.createServer(options, app).listen(PORT, function(){
     console.log('8080 connected!'); 
   });
-
-  // server.listen(PORT, function(){
-  //   console.log("서버 연결");
-  // })
-
-
 });

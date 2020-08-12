@@ -13,7 +13,7 @@
 # 팀원
 - gmae199boy -> 백엔드 담당  
 - acc-jiu -> 체인코드 담당  
-- seu678 -> 프론트 담당
+- seu678 -> 프론트 담당  
 - JJAKGUI -> 프론트 담당
 
 # 서버 실행
@@ -35,6 +35,28 @@ ganache-cli -d -m jelly
 node server
 
 # http://localhost:8080
+```
+
+```json
+// truffle-config.js
+networks: {
+development: {
+    host: "0.0.0.0",
+    port: 8545,
+    network_id: "*" // Match any network id
+}
+},
+solc: {
+optimizer: {
+    enabled: true,
+    runs: 200
+}
+},
+compilers: {
+solc: {
+    version: "^0.6.9"
+}
+}
 ```
 
 

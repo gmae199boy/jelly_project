@@ -24,16 +24,16 @@ contract Jelly {
     address beneficiary;
 
     // 펀딩 리스트를 저장하기 위해 추가
-    struct FundingList {
-        uint64 fundId;
-        uint64 amount;
-        //펀딩한 시간 추가
-    }
+    // struct FundingList {
+    //     uint64 fundId;
+    //     uint64 amount;
+    //     //펀딩한 시간 추가
+    // }
 
     struct Fund {
         uint donatedAmount;  //모금금액
         uint fundingGoal;   //펀드 목표 금액
-        uint recieveAmount;  //각 Recipient가 받는 금액
+        // uint recieveAmount;  //각 Recipient가 받는 금액
         address[] Recipients;  //수혜받는 수혜자 리스트는 이미 정해져 있다고 가정
         // 이걸 맵핑으로 해버리면 address를 알고 있지 않는이상 값을 볼 수가 없다.
         // 그리고 FundingList와 유사해 낭비를 하는 느낌이 든다
@@ -91,9 +91,9 @@ contract Jelly {
     // event Transfer(address _from, address _to, uint _value);
 
     // node server connect complete
-    function newFund(uint _fundingGoal, uint _recieveAmount, address[] memory _recipients) public returns (bool){
+    function newFund(uint _fundingGoal, address[] memory _recipients) public returns (bool){
         // Doner[] 배열로 변경해서 마지막 Doner를 new Doer[](0)으로 추가
-        funds.push(Fund(0, _fundingGoal, _recieveAmount, _recipients));
+        funds.push(Fund(0, _fundingGoal, _recipients));
         return true;
     }
 
@@ -117,19 +117,20 @@ contract Jelly {
         // 펀딩 금액이 목표금액에 달성하면 수혜자들에게 배분한다.
         // 이렇게 짜면 마지막에 기부한 사람이 가스비를 많이 내게 된다.
         // 나중에 독립적으로 실행하게 변경
-        if(f.donatedAmount == f.fundingGoal) receiveJelly(_fundId);
+        // if(f.donatedAmount == f.fundingGoal) receiveJelly(_fundId);
 
         // emit Transfer(msg.sender, beneficiary, _sendAmount);
         return true;
     }
 
     // 펀딩 목표금액에 달성하면 수혜자들에게 돈을 나눠주는 로직을 실행하기 위한 함수 추가
-    function receiveJelly(uint _fundId) private {
+    function receiveJelly(uint _fundId) public {
         Fund memory f = funds[_fundId];
-        require(f.donatedAmount == f.fundingGoal, "fundingGoal should be accomplished");
+        // require(f.donatedAmount == f.fundingGoal, "fundingGoal should be accomplished");
         require(f.donatedAmount <= balances[beneficiary], "um...we don't have enough jelly to give T.T");
+        uint receiveAmount = f.donatedAmount / f.Recipients.length;
         for (uint i = 0; i < f.Recipients.length; i++ ){
-            transfer(beneficiary, f.Recipients[i], f.recieveAmount);
+            transfer(beneficiary, f.Recipients[i], recieveAmount);
         }
     }
 

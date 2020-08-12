@@ -51,7 +51,9 @@ queryPromise.getFundList = function(page = 1, status = 2) {
 // 펀드 상품을 한개 불러온다
 queryPromise.getFund = function(fundId) {
     return new Promise((resolve, reject) => {
-        Fund.findOne({fundId: fundId}).exec((err, result) => {
+        Fund.findOne({fundId: fundId})
+            .populate('fundingDetails')
+            .exec((err, result) => {
             if (err) {reject(err);}
             resolve(result);
         });
@@ -107,9 +109,8 @@ queryPromise.setUserData = function(user) {
 // 유저가 들고있는 myFundingList를 Fund 모델에서 참조해서 불러온다.
 queryPromise.getPopulatedUserForMyFundingList = function(userId) {
     return new Promise((resolve, reject) => {
-        User.findOne({userId: userId}).populate('myFundingList.id', 
-            'fundId name amount'
-        ).exec((err, result) => {
+        User.findOne({userId: userId})
+        .populate('myFundingList.id').exec((err, result) => {
             if(err) reject(err);
             resolve(result);
         });

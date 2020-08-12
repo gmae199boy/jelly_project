@@ -68,13 +68,13 @@ module.exports = function(contract, account){
                 contract.deployed().then(function(contractInstance){
                     contractInstance.newFund(
                         result.amount, // 총 펀딩 달성 금액
-                        10, // 각 수혜자들이 받아야 할 금액
+                        // 10, // 각 수혜자들이 받아야 할 금액
                         // 수혜자들의 지갑주소를 배열로 넘겨야 한다.
                         ['0xD5Db8B803FDDF6D3454bb9fDB77795Dc845B90D6','0x9B201AEd418f3c07469F7688296BD247729493aE'],
                         {gas: 1000000, from: account}
                     ).then((bool) => {
                         if(bool) console.log("add fund Successful!!");
-                        else console.log("add product Fail");
+                        else console.log("add product Fail");Q
                         res.redirect('/fund');
                     })
                 });
@@ -186,18 +186,6 @@ module.exports = function(contract, account){
         //         })
         //     });
         // })
-
-        /**
-         * Query for mongodb
-         */
-        // Product.findOne({ eventId: req.params.id }, (err, event)=>{
-        //     if(err) {console.log(err); res.send('query err!');}
-        //     console.log(event);
-        //     res.render('event', {
-        //         donor : req.donor,
-        //         event: event
-        //     });
-        // });
     });
 
     return router;

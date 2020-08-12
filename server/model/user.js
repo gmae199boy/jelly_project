@@ -14,13 +14,13 @@ const userSchema = new mongoose.Schema({
     name: {
         type: String,
         unique: true,
-        //required: true,
+        required: true,
         //index: true
     },  
     // 유저 이메일
     email: {
         type: String,
-        //required: true,
+        required: true,
         unique: true,
         index: true
     }, 
@@ -29,19 +29,11 @@ const userSchema = new mongoose.Schema({
         type: String,
         //required: true
     }, 
-    // phoneNumber: {
-    //     type: String,
-    //     //required: true
-    // }, // 기부자 핸드폰 번호
-    // address: {
-    //     type: String,
-    //     //required: true
-    // }, // 기부자 주소
-    // 기부자가 지금까지 기부했던 기부 목록 // 수혜자가 받은 펀딩, 금액
     myFundingList: [{
         id: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Fund',
+            required: true,
         }, // Fund 컬렉션 참조 ID
         amount: {type: Number, default: 0,} // 기부금
     }],
@@ -68,8 +60,8 @@ const userSchema = new mongoose.Schema({
     // 기부자 결제 젤리 총량
     wallet: {type: Number, default: 0},
     address: {
-        type: Number,
-        //required: true,
+        type: String,
+        required: true,
     },
 });
 // 플러그인 설정

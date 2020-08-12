@@ -33,24 +33,16 @@
                 </thead>
        
                 <tbody>
+                <% if (user.myFundingList !== null){user.myFundingList.forEach((fund)=>{ %>
                   <tr>
                     <th scope="row">1</th>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                  </tr>
-                  <tr>
-                    <th scope="row">2</th>
-                    <td></td>
-                    <td></td>
+                    <td><%= fund.name %> </td>
+                    <td><%= fund.startDate %></td>
                     <td></td>
                   </tr>
-                  <tr>
-                    <th scope="row">3</th>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                  </tr>
+                <%  })} %>
+                </tr>   
+
                 </tbody>
               </table>
             
