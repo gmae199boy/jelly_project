@@ -1,10 +1,11 @@
-pragma solidity ^0.5.8;
+//SPDX-License-Identifier: UNLICENSED
+pragma solidity ^0.6.9;
 
 contract Jelly {
 
 
 
-    /**
+    /*
     Ownerble
     safeMath
     등 라이브러리는 나중에 추가
@@ -37,7 +38,8 @@ contract Jelly {
         // 이걸 맵핑으로 해버리면 address를 알고 있지 않는이상 값을 볼 수가 없다.
         // 그리고 FundingList와 유사해 낭비를 하는 느낌이 든다
         // 어떻게 개선..?
-        DonerList[] doners; // 기부자들 // mapping을 배열로 수정
+        // DonerList[] doners; // 기부자들 // mapping을 배열로 수정
+        mapping (address => uint) doners; // 배열 안되 제길..
     }
 
     // 기부자 리스트를 저장하기 위해 추가
@@ -60,7 +62,7 @@ contract Jelly {
     // Product[] public products;
     // 수혜자 구매목록 추가
     mapping (address => PurchaseList[]) public purchaseList;
-    mapping (address => FundingList[]) public fundingList;
+    // mapping (address => FundingList[]) public fundingList;
 
     constructor() public {
         name = "JELLY";
@@ -68,7 +70,7 @@ contract Jelly {
         decimals = 2;
         totalSupply = 1000000;
         owner = msg.sender;
-        balances[msg.sender] = totalSupply;
+        balances[owner] = totalSupply;
     }
 
 
@@ -79,55 +81,56 @@ contract Jelly {
     }
 
     function transfer(address _from, address _to, uint _value) public returns (bool success){
-        require(balances[_from] >= _value, "you got no money bro");
-        require(balances[_to] + _value > balances[_to], "we got some problem...");  //...Is is necessary??
+        // require(balances[_from] >= _value, "you got no money bro");
         balances[_from] -= _value;
         balances[_to] += _value;
         // emit Transfer(_from, _to, _value);
         return true;
     }
 
-    event Transfer(address _from, address _to, uint _value);
+    // event Transfer(address _from, address _to, uint _value);
 
     // node server connect complete
     function newFund(uint _fundingGoal, uint _recieveAmount, address[] memory _recipients) public returns (bool){
         // Doner[] 배열로 변경해서 마지막 Doner를 new Doer[](0)으로 추가
-        funds.push(Fund(0, _fundingGoal, _recieveAmount, _recipients, new DonerList[](0)));
+        funds.push(Fund(0, _fundingGoal, _recieveAmount, _recipients));
         return true;
     }
 
 
-    function funding(uint64 _fundId, uint64 _sendAmount) public returns (bool) {
-        Fund memory f = funds[_fundId];
-        require(f.donatedAmount + _sendAmount < f.fundingGoal, "overflow funding price");
+    function funding(uint _fundId, uint _sendAmount) public returns (bool) {
+        Fund storage f = funds[_fundId];
+        require(f.donatedAmount + _sendAmount <= f.fundingGoal, "overflow funding price");
         // transfer를 앞에 쓰는 이유는 추진력을 얻기 위함
         // require가 transfer에 있기 때문에 먼저 하는것이 좋다
         transfer(msg.sender, beneficiary, _sendAmount);
-        f.doners[f.doners.length] = DonerList(msg.sender, _sendAmount);
+        f.doners[msg.sender] += _sendAmount;
+        // f.doners[f.doners.length] = DonerList(msg.sender, _sendAmount);
         f.donatedAmount += _sendAmount;
-        funds.push(f);
+
+        // funds[_fundId] = f;
 
         // 기부자에 펀딩 리스트 추가
-        FundingList memory list = FundingList(_fundId, _sendAmount);
-        fundingList[msg.sender].push(list);
+        // FundingList memory list = FundingList(_fundId, _sendAmount);
+        // fundingList[msg.sender].push(list);
 
         // 펀딩 금액이 목표금액에 달성하면 수혜자들에게 배분한다.
-        if(f.donatedAmount == f.fundingGoal) receive(_fundId);
+        // 이렇게 짜면 마지막에 기부한 사람이 가스비를 많이 내게 된다.
+        // 나중에 독립적으로 실행하게 변경
+        if(f.donatedAmount == f.fundingGoal) receiveJelly(_fundId);
 
         // emit Transfer(msg.sender, beneficiary, _sendAmount);
         return true;
     }
 
     // 펀딩 목표금액에 달성하면 수혜자들에게 돈을 나눠주는 로직을 실행하기 위한 함수 추가
-    function receive(uint _fundId) public returns (bool) {
+    function receiveJelly(uint _fundId) private {
         Fund memory f = funds[_fundId];
         require(f.donatedAmount == f.fundingGoal, "fundingGoal should be accomplished");
         require(f.donatedAmount <= balances[beneficiary], "um...we don't have enough jelly to give T.T");
         for (uint i = 0; i < f.Recipients.length; i++ ){
-            balances[f.Recipients[i]] += f.recieveAmount;
+            transfer(beneficiary, f.Recipients[i], f.recieveAmount);
         }
-        balances[beneficiary] -= f.donatedAmount;
-        return true;
     }
 
     function buyProduct(uint32 _productId, uint32 _totalPrice, uint32 _quantity) public returns (bool) {

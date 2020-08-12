@@ -103,9 +103,11 @@ module.exports = function(contract, account){
                 res.send("목표 금액을 초과했으니 목표 금액까지만 기부해라");
                 return;
             } else {
-                var fundingDetails = {$push: 
+                var fundingDetails = {
+                    $push: 
                     {'fundingDetails': 
-                        {'id': req.user._id, 'amount': amount,}},
+                        {'id': req.user._id, 'amount': amount,}
+                    },
                     currentAmount: result.currentAmount+amount};
                 queryPromise.updateFund(fundId, fundingDetails).then((result) => {
                     fundResult = result;
