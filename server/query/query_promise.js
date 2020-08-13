@@ -24,19 +24,17 @@ queryPromise.getUserFundingList = function(userId) {
 // page와 status에 맞게 리스트를 반환한다.
 // page = 2, status = 2 이면 
 // status 가 2인(펀딩 중) 20~40 인덱스의 펀딩 리스트를 반환.
-queryPromise.getFundList = function(page = 1, status = 2) {
+queryPromise.getFundList = function(page = 1){//, status = 2) {
     return new Promise((resolve, reject) => {
         //status = 1 : 펀딩 진행 전, status = 2 : 펀딩 진행 중, status = 4 : 펀딩 종료
-        Fund.find({status: status}, { 
+        Fund.find({}, { 
             _id: 0, 
-            fundId: 1, 
-            name: 1, 
-            type: 1, 
-            amount: 1, 
-            startDate: 1, 
-            endDate: 1, 
-            desc: 1, 
-            status: 1 })
+            fundId: 1,
+            name: 1,
+            amount: 1,
+            startDate: 1,
+            desc: 1,
+        })
         .sort({ $natural: 1 })
         .skip((page - 1) * perPage)
         .limit(perPage)

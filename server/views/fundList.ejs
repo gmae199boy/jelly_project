@@ -29,8 +29,21 @@
         </div>
 
                 <div class="row">
+                  <div style = "padding: 50px 0px 10px 10px;"></div>
                     <% if (funds !== null){funds.forEach((fund)=>{ %>
-                   <div class="col-lg-4 col-md-6 mb-4">
+                        <div class="card" style="width: 18rem; height: 22rem; margin-top: 50px; margin-left: 60px; margin-bottom: 10px;">
+                            <img src="images/desk.jpg" class="card-img-top" alt="">
+                            <div class="card-body">
+                              <h5>펀딩 이름 : <%= fund.name %></a></h5>
+                              <p class="card-text">펀딩 목표 금액 : <%= fund.amount %> </p>
+                              <p class="card-text">펀딩 설명 : <%= fund.desc %> </p>
+                              <center>
+                                <a href="/fund/<%= fund.fundId %>" class="btn btn-primary">FUND</a>
+                              </center>                  
+                            </div>
+                      </a>
+                    </div>  
+                   <!-- <div class="col-lg-4 col-md-6 mb-4">
                      <div class="card h-100">
                        <a href="/fund/<%= fund.fundId %>"><img class="card-img-top" src="images/desk.jpg" alt=""></a>
                              <div class="card-body">
@@ -41,7 +54,7 @@
                             <div class="progress">
                              <div class="progress-bar" style="width: 70%;">70%</div>
                             </div>
-                    </div>
+                    </div> -->
                   <% })} %>
                    </div>
                 </div>

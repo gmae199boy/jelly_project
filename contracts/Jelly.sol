@@ -130,7 +130,7 @@ contract Jelly {
         require(f.donatedAmount <= balances[beneficiary], "um...we don't have enough jelly to give T.T");
         uint receiveAmount = f.donatedAmount / f.Recipients.length;
         for (uint i = 0; i < f.Recipients.length; i++ ){
-            transfer(beneficiary, f.Recipients[i], recieveAmount);
+            transfer(beneficiary, f.Recipients[i], receiveAmount);
         }
     }
 

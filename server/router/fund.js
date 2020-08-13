@@ -16,9 +16,10 @@ passport.use(User.createStrategy());
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
-const PRE_FUND = 1;
-const FUNDING = 2;
-const FUND_OVER = 4;
+// 현재 펀드의 상태
+// const PRE_FUND = 1;
+// const FUNDING = 2;
+// const FUND_OVER = 4;
 
 
 module.exports = function(contract, account){
@@ -34,15 +35,6 @@ module.exports = function(contract, account){
         }).catch((err) => {
             res.send(err);
         })
-
-        // normal query
-        // query.getProductList(req.query.page, req.query.status, (err, result) => {
-        //     if(err) {console.log(err); res.send("readProductList query err!!");}
-        //     res.render('productList', {
-        //         user: req.user,
-        //         products: result,
-        //     });
-        // });
     });
 
     router.route("/create")
@@ -57,13 +49,13 @@ module.exports = function(contract, account){
                 name: req.body.name,
                 amount: req.body.amount,
                 desc: req.body.desc,
-                status: req.body.status,
+                // status: req.body.status,
                 startDate: moment(date).format("YYYY-MM-DD hh:mm"),
             });
 
             // promise query
             queryPromise.setFund(fund).then((result) => {
-                //이더리움 통신
+                // 이더리움 통신
                 // console.log('시간 차이: ', moment.duration(moment().diff(result.startDate)).asHours());
                 contract.deployed().then(function(contractInstance){
                     contractInstance.newFund(
@@ -74,7 +66,7 @@ module.exports = function(contract, account){
                         {gas: 1000000, from: account}
                     ).then((bool) => {
                         if(bool) console.log("add fund Successful!!");
-                        else console.log("add product Fail");Q
+                        else console.log("add product Fail");
                         res.redirect('/fund');
                     })
                 });
@@ -136,11 +128,18 @@ module.exports = function(contract, account){
                                         console.log('queryPromise.receiveJelly error!');
                                         res.send('queryPromise.receiveJelly error!');
                                     } else {
-                                        fundResult.status = FUND_OVER;
                                         queryPromise.setFund(fundResult).then((result) => {
-                                            console.log(result);
-                                            console.log("수혜자들에게 분배 성공!");
-                                            res.redirect('/fund');
+                                            // 이더에서 젤리 분배 시작
+                                            contract.deployed().then(function(contractInstance){
+                                                contractInstance.receiveJelly(
+                                                    fundId, // 펀드 ID
+                                                    {gas: 1000000, from: account}
+                                                ).then((bool) => {
+                                                    if(bool) console.log("receive jelly Successful!!");
+                                                    else console.log("receive jelly Fail");
+                                                    res.redirect('/fund');
+                                                })
+                                            });
                                         }).catch((err) => {
                                             console.log(err);
                                             res.send('정산 에러');

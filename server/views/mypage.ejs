@@ -19,7 +19,8 @@
                     <% } else { %>
                         <div class="profile-info" display="inline-block"><p style="font-size: 30px; color:white;"> 수혜자: <%= user.name %></p></div>
                     <% } %>
-                    <br>    
+                    <br>
+                    <div class="profile-info" display="inline-block"><p style="font-size: 30px; color:white;"> 지갑주소: <%= user.address %></p></div>    
             </div>
 
             <table class="table table-hover">
@@ -27,7 +28,7 @@
                   <tr>
                     <th scope="col"> </th>
                     <th scope="col">기부 프로젝트명</th>
-                    <th scope="col">기부 날짜</th>
+                    <th scope="col">펀딩 시작 날짜</th>
                     <th scope="col">프로젝트 펀딩 현황</th>
                   </tr>
                 </thead>
@@ -35,9 +36,10 @@
                 <tbody>
                 <% if (user.myFundingList !== null){user.myFundingList.forEach((fund)=>{ %>
                   <tr>
-                    <th scope="row">1</th>
-                    <td><%= fund.name %> </td>
-                    <td><%= fund.startDate %></td>
+                    <th scope="row">
+                    </th>
+                    <td><%= fund.id.name %> </td>
+                    <td><%= fund.id.startDate %></td>
                     <td></td>
                   </tr>
                 <%  })} %>
@@ -59,7 +61,7 @@
             <div id="my-item">
                 <% if (user.myFundingList !== null){user.myFundingList.forEach((fund)=>{ %>
                     <div class="list-group" style="margin-bottom: 0px !important;">
-                        <a href="/fund/<%= fund.fundId %>" class="list-group-item">
+                        <a href="/fund/<%= fund.id.fundId %>" class="list-group-item">
                             <h4 class="list-group-item-heading">기부자 : <%= fund.id.name %> </h4>
                             <p class="list-group-item-text">기부한 JELLY 수 : <%= fund.amount %></p>
                         </a>

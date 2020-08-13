@@ -14,9 +14,15 @@
 - gmae199boy -> 백엔드 담당  
 - acc-jiu -> 체인코드 담당  
 - seu678 -> 프론트 담당  
-- JJAKGUI -> 프론트 담당
+- soo1121 -> 프론트 담당
 
 # 서버 실행
+## 필요 프로그램  
+- docker(옵션) -> mongoDB, ganache등 docker에서 실행 가능  
+- ganache  
+- truffle  
+- mongoDB  
+
 ``` bash
 # 실행 전에 ganache를 동작시켜야 한다.
 # ganache 네트워크는 8545 포드이다
@@ -41,7 +47,9 @@ node server
 // truffle-config.js
 networks: {
 development: {
+    // IP
     host: "0.0.0.0",
+    // port: 8545
     port: 8545,
     network_id: "*" // Match any network id
 }
@@ -54,6 +62,7 @@ optimizer: {
 },
 compilers: {
 solc: {
+    // 컴파일러 버전 0.6.9
     version: "^0.6.9"
 }
 }

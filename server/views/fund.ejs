@@ -6,7 +6,7 @@
 
     <body>
         <%- include('partials/navbar1') %>
-        <div style = "padding: 50px 10px;"></div>
+        <div style = "padding: 50px 10px; "></div>
         <div class="section">
             <div class="header">
                 <li>Fund Name : <%= fund.name %></li>
@@ -15,6 +15,7 @@
                 <li>Fund Amount : <%= fund.amount %></li>
                 <li>Fund Start Date : <%= fund.startDate %></li>
                 <li>Fund Status : <%= fund.status %></li>
+                <li>Fund  : <%= fund.fundingDetails[0].name %></li>
             </div>
             <div>
                 <!-- <a href="/event/update">수정하기</a> -->
