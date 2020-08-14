@@ -1,15 +1,15 @@
 // ExpressJS Setup
 const express = require('express');
 const app = express();
-var https = require('https');
+// var https = require('https');
 var bodyParser = require('body-parser');
 const fs = require('fs');
 const path = require('path');
-const options = {
-  key: fs.readFileSync('/etc/letsencrypt/live/blog.nopublisher.dev/privkey.pem'),
-  cert: fs.readFileSync('/etc/letsencrypt/live/blog.nopublisher.dev/fullchain.pem'),
-  ca: fs.readFileSync('/etc/letsencrypt/live/blog.nopublisher.dev/chain.pem')
-};
+// const options = {
+//   key: fs.readFileSync('/etc/letsencrypt/live/blog.nopublisher.dev/privkey.pem'),
+//   cert: fs.readFileSync('/etc/letsencrypt/live/blog.nopublisher.dev/fullchain.pem'),
+//   ca: fs.readFileSync('/etc/letsencrypt/live/blog.nopublisher.dev/chain.pem')
+// };
 
 //truffle setting
 var contract = require('truffle-contract');
@@ -94,10 +94,10 @@ web3.eth.getAccounts(function(err, accs){
 
 
   // server start
-  // app.listen(PORT, HOST);
-  // console.log(`Running on http://${HOST}:${PORT}`);
+  app.listen(PORT, HOST);
+  console.log(`Running on http://${HOST}:${PORT}`);
 
-  https.createServer(options, app).listen(PORT, function(){
-    console.log('8080 connected!'); 
-  });
+  // https.createServer(options, app).listen(PORT, function(){
+  //   console.log('8080 connected!'); 
+  // });
 });
