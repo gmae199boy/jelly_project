@@ -47,7 +47,7 @@
     "passport-twitter": "^1.0.4",
     "path": "^0.12.7",
     "serve-static": "^1.14.1",
-    "sharp": "^0.23.1",
+    "sharp": "^0.30.5",
     "truffle-contract": "3.0.6"
   }
 }
